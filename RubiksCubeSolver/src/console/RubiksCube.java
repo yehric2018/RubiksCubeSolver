@@ -4,23 +4,44 @@ import java.util.ArrayList;
 
 public class RubiksCube {
 
-//	public static void main(String[] args) {
-//		init();
-//		displayCube();
-//		scramble();
-//	}
-
-	public RubiksCube() {
-		init();
+	public RubiksCube(char[][] front, char[][] back, char[][] left, char[][] right, char[][] top, char[][] down) {
+		this.left = left;
+		this.right = right;
+		this.down = down;
+		this.top = top;
+		this.front = front;
+		this.back = back;
 	}
 	
+	public RubiksCube() {
+		init();
+		connected = new ArrayList<RubiksCube>();
+		
+		moves.add("U");
+		moves.add("D");
+		moves.add("R");
+		moves.add("L");
+		moves.add("F");
+		moves.add("B");
+		moves.add("U'");
+		moves.add("D'");
+		moves.add("R'");
+		moves.add("L'");
+		moves.add("F'");
+		moves.add("B'");
+	}
+	
+	ArrayList<RubiksCube> connected;
+	
 	// hold the data of each side of the cube
-	static char[][] left;
-	static char[][] right;
-	static char[][] top;
-	static char[][] down;
-	static char[][] front;
-	static char[][] back;
+	char[][] left;
+	char[][] right;
+	char[][] top;
+	char[][] down;
+	char[][] front;
+	char[][] back;
+	
+	ArrayList<String> moves = new ArrayList<String>();
 
 	// scramble the cube
 	void scramble() {
@@ -92,6 +113,31 @@ public class RubiksCube {
 			for (int c = 0; c < front.length; c++) {
 				right[r][c] = 'G';
 			}
+		}
+	}
+	
+	public void initConnected() {
+		connected = new ArrayList<RubiksCube>();
+		
+		moves.add("U");
+		moves.add("D");
+		moves.add("R");
+		moves.add("L");
+		moves.add("F");
+		moves.add("B");
+		moves.add("U'");
+		moves.add("D'");
+		moves.add("R'");
+		moves.add("L'");
+		moves.add("F'");
+		moves.add("B'");
+		
+		for (int i = 0; i < moves.size(); i++) {
+			turn(moves.get(i), -1);
+			connected.add(copyCube());
+			turn(moves.get(i), -1);
+			turn(moves.get(i), -1);
+			turn(moves.get(i), -1);
 		}
 	}
 
@@ -295,6 +341,28 @@ public class RubiksCube {
 		return true;
 	}
 	
+	// helper method to return a copy of the cube
+	RubiksCube copyCube() {
+		char[][] L = copy(left);
+		char[][] R = copy(right);
+		char[][] T = copy(top);
+		char[][] D = copy(down);
+		char[][] F = copy(front);
+		char[][] B = copy(back);
+		return new RubiksCube(F, B, L, R, T, D);
+	}
+	
+	// helper method to return a copy of a two dimensional char array
+	private char[][] copy(char[][] table) {
+		char[][] copy = new char[table.length][table[0].length];
+		for (int r = 0; r < copy.length; r++) {
+			for (int c = 0; c < copy[r].length; c++) {
+				copy[r][c] = table[r][c];
+			}
+		}
+		return copy;
+	}
+	
 	// helper method to return a copy of a char array
 	private char[] copy(char[] array) {
 		char[] copy = new char[array.length];
@@ -310,8 +378,8 @@ public class RubiksCube {
 				&& oneSideSolved(right) && oneSideSolved(down);
 	}
 	
-	// solve the cube
+	
 	void solve() {
-		
+
 	}
 }
