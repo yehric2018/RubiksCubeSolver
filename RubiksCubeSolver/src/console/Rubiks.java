@@ -8,8 +8,6 @@ public class Rubiks {
 		init();
 		displayCube();
 		scramble();
-//		System.out.println("Start solving");
-//		solve();
 	}
 
 	// hold the data of each side of the cube
@@ -304,28 +302,5 @@ public class Rubiks {
 	static boolean solved() {
 		return oneSideSolved(top) && oneSideSolved(back) && oneSideSolved(front) && oneSideSolved(left)
 				&& oneSideSolved(right) && oneSideSolved(down);
-	}
-	
-	// solve the cube
-	static void solve() {
-		// brute force solve, but should use an algorithm
-		while (!solved()) {
-			ArrayList<String> moves = new ArrayList<String>();
-			moves.add("U");
-			moves.add("D");
-			moves.add("R");
-			moves.add("L");
-			moves.add("F");
-			moves.add("B");
-			moves.add("U'");
-			moves.add("D'");
-			moves.add("R'");
-			moves.add("L'");
-			moves.add("F'");
-			moves.add("B'");
-
-			int rand = (int) (Math.random() * 12);
-			turn(moves.get(rand));
-		}
 	}
 }
