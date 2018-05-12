@@ -4,15 +4,15 @@ import java.util.ArrayList;
 
 public class RubiksCube {
 
-	public RubiksCube(char[][] front, char[][] back, char[][] left, char[][] right, char[][] top, char[][] down) {
+	public RubiksCube(char[][] front, char[][] back, char[][] left, char[][] right, char[][] up, char[][] down) {
 		this.left = left;
 		this.right = right;
 		this.down = down;
-		this.top = top;
+		this.up = up;
 		this.front = front;
 		this.back = back;
 	}
-	
+
 	public RubiksCube() {
 		init();
 		moves.add("U");
@@ -28,15 +28,15 @@ public class RubiksCube {
 		moves.add("f");
 		moves.add("b");
 	}
-	
+
 	// hold the data of each side of the cube
 	char[][] left;
 	char[][] right;
-	char[][] top;
+	char[][] up;
 	char[][] down;
 	char[][] front;
 	char[][] back;
-	
+
 	// each of the twelve moves that can happen for any given cube
 	ArrayList<String> moves = new ArrayList<String>();
 
@@ -55,7 +55,7 @@ public class RubiksCube {
 		// each side has 9 locations for colors at a time
 		left = new char[3][3];
 		right = new char[3][3];
-		top = new char[3][3];
+		up = new char[3][3];
 		down = new char[3][3];
 		front = new char[3][3];
 		back = new char[3][3];
@@ -69,7 +69,7 @@ public class RubiksCube {
 
 		for (int r = 0; r < front.length; r++) {
 			for (int c = 0; c < front.length; c++) {
-				top[r][c] = 'R';
+				up[r][c] = 'R';
 			}
 		}
 
@@ -97,21 +97,21 @@ public class RubiksCube {
 			}
 		}
 	}
-	
+
 	// testing method to display the cube
 	public String toString() {
 		String res = "";
-		res += "     T\n";
-		res += "     " + top[0][0] + top[0][1] + top[0][2] + "\n";
-		res += "     " + top[1][0] + top[1][1] + top[1][2] + "\n";
-		res += "     " + top[2][0] + top[2][1] + top[2][2] + "\n";
+		res += "     U\n";
+		res += "     " + up[0][0] + up[0][1] + up[0][2] + "\n";
+		res += "     " + up[1][0] + up[1][1] + up[1][2] + "\n";
+		res += "     " + up[2][0] + up[2][1] + up[2][2] + "\n";
 		res += "L    F    R\n";
-		res += "" + left[0][0] + left[0][1] + left[0][2] + "  " + front[0][0] + front[0][1] + front[0][2]
-				+ "  " + right[0][0] + right[0][1] + right[0][2] + "\n";
-		res += "" + left[1][0] + left[1][1] + left[1][2] + "  " + front[1][0] + front[1][1] + front[1][2]
-				+ "  " + right[1][0] + right[1][1] + right[1][2] + "\n";
-		res += "" + left[2][0] + left[2][1] + left[2][2] + "  " + front[2][0] + front[2][1] + front[2][2]
-				+ "  " + right[2][0] + right[2][1] + right[2][2] + "\n";
+		res += "" + left[0][0] + left[0][1] + left[0][2] + "  " + front[0][0] + front[0][1] + front[0][2] + "  "
+				+ right[0][0] + right[0][1] + right[0][2] + "\n";
+		res += "" + left[1][0] + left[1][1] + left[1][2] + "  " + front[1][0] + front[1][1] + front[1][2] + "  "
+				+ right[1][0] + right[1][1] + right[1][2] + "\n";
+		res += "" + left[2][0] + left[2][1] + left[2][2] + "  " + front[2][0] + front[2][1] + front[2][2] + "  "
+				+ right[2][0] + right[2][1] + right[2][2] + "\n";
 		res += "     D\n";
 		res += "     " + down[0][0] + down[0][1] + down[0][2] + "\n";
 		res += "     " + down[1][0] + down[1][1] + down[1][2] + "\n";
@@ -130,7 +130,7 @@ public class RubiksCube {
 			turn(turn.charAt(i) + "");
 		}
 	}
-	
+
 	// turn the cube according to a certain given algorithm
 	void turn(String algorithm) {
 		System.out.println("algorithm is " + algorithm);
@@ -140,155 +140,110 @@ public class RubiksCube {
 	}
 
 	// turn the cube according to the given algorithm
-	private void turn(String algorithm, int ignore) {
+	private void turn(String algorithm, int ignroe) {
+		RubiksCube copy = copyCube();
 		if (algorithm.equals("U")) {
-			char[] f = copy(front[0]);
-			char[] l = copy(left[0]);
-			char[] b = copy(back[0]);
-			char[] r = copy(right[0]);
-
-			front[0] = r;
-			left[0] = f;
-			back[0] = l;
-			right[0] = b;
-			rotate(top);
-			rotate(top);
-			rotate(top);
+			rotate(up);
+			front[0][0] = copy.right[0][0];
+			front[0][1] = copy.right[0][1];
+			front[0][2] = copy.right[0][2];
+			left[0][0] = copy.front[0][0];
+			left[0][1] = copy.front[0][1];
+			left[0][2] = copy.front[0][2];
+			back[0][0] = copy.left[0][0];
+			back[0][1] = copy.left[0][1];
+			back[0][2] = copy.left[0][2];
+			right[0][0] = copy.back[0][0];
+			right[0][1] = copy.back[0][1];
+			right[0][2] = copy.back[0][2];
 		} else if (algorithm.equals("D")) {
-			char[] f = copy(front[2]);
-			char[] l = copy(left[2]);
-			char[] b = copy(back[2]);
-			char[] r = copy(right[2]);
-
-			front[2] = l;
-			left[2] = b;
-			back[2] = r;
-			right[2] = f;
 			rotate(down);
-			rotate(down);
-			rotate(down);
-		} else if (algorithm.equals("L")) {
-			char[] f = { front[0][0], front[1][0], front[2][0] };
-			char[] d = { down[0][0], down[1][0], down[2][0] };
-			char[] b = { back[0][2], back[1][2], back[2][2] };
-			char[] t = { top[0][0], top[1][0], top[2][0] };
-
-			front[0][0] = t[0];
-			front[1][0] = t[1];
-			front[2][0] = t[2];
-			down[0][0] = f[0];
-			down[1][0] = f[1];
-			down[2][0] = f[2];
-			back[0][2] = d[0];
-			back[1][2] = d[1];
-			back[2][2] = d[2];
-			top[0][0] = b[0];
-			top[1][0] = b[1];
-			top[2][0] = b[2];
-			rotate(left);
-			rotate(left);
-			rotate(left);
-		} else if (algorithm.equals("R")) {
-			char[] f = { front[0][2], front[1][2], front[2][2] };
-			char[] d = { down[0][2], down[1][2], down[2][2] };
-			char[] b = { back[0][0], back[1][0], back[2][0] };
-			char[] t = { top[0][2], top[1][2], top[2][2] };
-
-			front[0][2] = d[0];
-			front[1][2] = d[1];
-			front[2][2] = d[2];
-			down[0][2] = b[0];
-			down[1][2] = b[1];
-			down[2][2] = b[2];
-			back[0][0] = t[0];
-			back[1][0] = t[1];
-			back[2][0] = t[2];
-			top[0][2] = f[0];
-			top[1][2] = f[1];
-			top[2][2] = f[2];
-			rotate(right);
-			rotate(right);
-			rotate(right);
+			front[2][0] = copy.left[2][0];
+			front[2][1] = copy.left[2][1];
+			front[2][2] = copy.left[2][2];
+			right[2][0] = copy.front[2][0];
+			right[2][1] = copy.front[2][1];
+			right[2][2] = copy.front[2][2];
+			back[2][0] = copy.right[2][0];
+			back[2][1] = copy.right[2][1];
+			back[2][2] = copy.right[2][2];
+			left[2][0] = copy.back[2][0];
+			left[2][1] = copy.back[2][1];
+			left[2][2] = copy.back[2][2];
 		} else if (algorithm.equals("F")) {
-			char[] u = { top[2][0], top[2][1], top[2][2] };
-			char[] r = { right[0][0], right[1][0], right[2][0] };
-			char[] d = { down[0][0], down[0][1], down[0][2] };
-			char[] l = { left[2][2], left[1][2], left[0][2] };
-			
-			right[0][0] = u[0];
-			right[1][0] = u[1];
-			right[2][0] = u[2];
-			down[0][0] = r[0];
-			down[0][1] = r[1];
-			down[0][2] = r[2];
-			left[0][2] = d[0];
-			left[1][2] = d[1];
-			left[2][2] = d[2];
-			top[2][0] = l[0];
-			top[2][1] = l[1];
-			top[2][2] = l[2];
 			rotate(front);
-			rotate(front);
-			rotate(front);
+			up[2][0] = copy.left[2][2];
+			up[2][1] = copy.left[1][2];
+			up[2][2] = copy.left[0][2];
+			right[0][0] = copy.up[2][0];
+			right[1][0] = copy.up[2][1];
+			right[2][0] = copy.up[2][2];
+			down[0][0] = copy.right[2][0];
+			down[0][1] = copy.right[1][0];
+			down[0][2] = copy.right[0][0];
+			left[2][2] = copy.down[0][2];
+			left[1][2] = copy.down[0][1];
+			left[0][2] = copy.down[0][0];
 		} else if (algorithm.equals("B")) {
-			char[] u = { top[0][2], top[0][1], top[0][0] };
-			char[] r = { right[0][2], right[1][2], right[2][2] };
-			char[] d = { down[2][2], down[2][1], down[2][0] };
-			char[] l = { left[0][0], left[1][0], left[2][0] };
-			
-			right[0][2] = d[0];
-			right[1][2] = d[1];
-			right[2][2] = d[2];
-			down[2][0] = l[0];
-			down[2][1] = l[1];
-			down[2][2] = l[2];
-			left[0][0] = u[0];
-			left[1][0] = u[1];
-			left[2][0] = u[2];
-			top[0][0] = r[0];
-			top[0][1] = r[1];
-			top[0][2] = r[2];
 			rotate(back);
-			rotate(back);
-			rotate(back);
+			up[0][0] = copy.right[0][2];
+			up[0][1] = copy.right[1][2];
+			up[0][2] = copy.right[2][2];
+			left[0][0] = copy.up[0][2];
+			left[1][0] = copy.up[0][1];
+			left[2][0] = copy.up[0][0];
+			down[2][0] = copy.left[0][0];
+			down[2][1] = copy.left[1][0];
+			down[2][2] = copy.left[2][0];
+			right[0][2] = copy.down[2][2];
+			right[1][2] = copy.down[2][1];
+			right[2][2] = copy.down[2][0];
+		} else if (algorithm.equals("L")) {
+			rotate(left);
+			front[0][0] = copy.up[0][0];
+			front[1][0] = copy.up[1][0];
+			front[2][0] = copy.up[2][0];
+			down[0][0] = copy.front[0][0];
+			down[1][0] = copy.front[1][0];
+			down[2][0] = copy.front[2][0];
+			back[2][2] = copy.down[0][0];
+			back[1][2] = copy.down[1][0];
+			back[0][2] = copy.down[2][0];
+			up[0][0] = copy.back[2][2];
+			up[1][0] = copy.back[1][2];
+			up[2][0] = copy.back[0][2];
+		} else if (algorithm.equals("R")) {
+			rotate(right);
+			up[0][2] = copy.front[0][2];
+			up[1][2] = copy.front[1][2];
+			up[2][2] = copy.front[2][2];
+			back[0][0] = copy.up[2][2];
+			back[1][0] = copy.up[1][2];
+			back[2][0] = copy.up[0][2];
+			down[0][2] = copy.back[2][0];
+			down[1][2] = copy.back[1][0];
+			down[2][2] = copy.back[0][0];
+			front[0][2] = copy.down[0][2];
+			front[1][2] = copy.down[1][2];
+			front[2][2] = copy.down[2][2];
 		} else {
-			if (algorithm.equals("u")) {
-				turn("U", -1);
-				turn("U", -1);
-				turn("U", -1);
-			} else if (algorithm.equals("d")) {
-				turn("D", -1);
-				turn("D", -1);
-				turn("D", -1);
-			} else if (algorithm.equals("l")) {
-				turn("L", -1);
-				turn("L", -1);
-				turn("L", -1);
-			} else if (algorithm.equals("r")) {
-				turn("R", -1);
-				turn("R", -1);
-				turn("R", -1);
-			} else if (algorithm.equals("f")) {
-				turn("F", -1);
-				turn("F", -1);
-				turn("F", -1);
-			} else if (algorithm.equals("b")) {
-				turn("B", -1);
-				turn("B", -1);
-				turn("B", -1);
+			for (int i = 0; i < 3; i++) {
+				turn(algorithm.toUpperCase(), -1);
 			}
 		}
 	}
 
-	// helper method to rotate a 2d array clockwise
+	// helper method to rotate a 2d array counterclockwise
 	private void rotate(char[][] array) {
-		for (int x = 0; x < array.length / 2; x++) {
-			for (int y = x; y < array.length - x - 1; y++) {
-				char temp = array[x][y];
-				array[x][y] = array[y][array.length - 1 - x];
-				array[y][array.length - 1 - x] = array[array.length - 1 - x][array.length - 1 - y];
-				array[array.length - 1 - x][array.length - 1 - y] = array[array.length - 1 - y][x];
-				array[array.length - 1 - y][x] = temp;
+		for (int i = 0; i < 3; i++) {
+			for (int x = 0; x < array.length / 2; x++) {
+				for (int y = x; y < array.length - x - 1; y++) {
+					char temp = array[x][y];
+					array[x][y] = array[y][array.length - 1 - x];
+					array[y][array.length - 1 - x] = array[array.length - 1 - x][array.length - 1 - y];
+					array[array.length - 1 - x][array.length - 1 - y] = array[array.length - 1 - y][x];
+					array[array.length - 1 - y][x] = temp;
+				}
 			}
 		}
 	}
@@ -305,18 +260,18 @@ public class RubiksCube {
 		}
 		return true;
 	}
-	
+
 	// helper method to return a copy of the cube
 	RubiksCube copyCube() {
 		char[][] L = copy(left);
 		char[][] R = copy(right);
-		char[][] T = copy(top);
+		char[][] U = copy(up);
 		char[][] D = copy(down);
 		char[][] F = copy(front);
 		char[][] B = copy(back);
-		return new RubiksCube(F, B, L, R, T, D);
+		return new RubiksCube(F, B, L, R, U, D);
 	}
-	
+
 	// helper method to return a copy of a two dimensional char array
 	private char[][] copy(char[][] table) {
 		char[][] copy = new char[table.length][table[0].length];
@@ -327,7 +282,7 @@ public class RubiksCube {
 		}
 		return copy;
 	}
-	
+
 	// helper method to return a copy of a char array
 	private char[] copy(char[] array) {
 		char[] copy = new char[array.length];
@@ -336,19 +291,18 @@ public class RubiksCube {
 		}
 		return copy;
 	}
-	
+
 	// check if the cube is solved
 	private boolean solved() {
-		return oneSideSolved(top) && oneSideSolved(back) && oneSideSolved(front) && oneSideSolved(left)
+		return oneSideSolved(up) && oneSideSolved(back) && oneSideSolved(front) && oneSideSolved(left)
 				&& oneSideSolved(right) && oneSideSolved(down);
 	}
-	
+
 	// first step: gather the white edges
-	private void whiteEdges() {
-		boolean whiteEdgesInPlace = front[0][1] == 'W' && front[1][0] == 'W' && front[1][2] == 'W'
-				&& front[2][1] == 'W' && left[1][2] == 'B' && right[1][0] == 'G' && down[0][1] == 'O'
-				&& top[2][1] == 'R';
-		
+	void whiteEdges() {
+		boolean whiteEdgesInPlace = front[0][1] == 'W' && front[1][0] == 'W' && front[1][2] == 'W' && front[2][1] == 'W'
+				&& left[1][2] == 'B' && right[1][0] == 'G' && down[0][1] == 'O' && up[2][1] == 'R';
+
 		while (!whiteEdgesInPlace) {
 			if (back[1][0] == 'W') {
 				turns("B");
@@ -372,7 +326,7 @@ public class RubiksCube {
 				turns("ruBUbR");
 			} else if (right[2][1] == 'W') {
 				turns("RRuBUbRR");
-			} else if (front[0][1] == 'W' && top[2][1] != 'R') {
+			} else if (front[0][1] == 'W' && up[2][1] != 'R') {
 				turns("UU");
 			} else if (front[1][0] == 'W' && left[1][2] != 'B') {
 				turns("FUUf");
@@ -380,13 +334,13 @@ public class RubiksCube {
 				turns("fUUF");
 			} else if (front[2][1] == 'W' && down[0][1] != 'O') {
 				turns("FFUUFF");
-			} else if (top[0][1] == 'W') {
+			} else if (up[0][1] == 'W') {
 				turns("BldLBB");
-			} else if (top[1][0] == 'W') {
+			} else if (up[1][0] == 'W') {
 				turns("UBuldLBB");
-			} else if (top[1][2] == 'W') {
+			} else if (up[1][2] == 'W') {
 				turns("uBUldLBB");
-			} else if (top[2][1] == 'W') {
+			} else if (up[2][1] == 'W') {
 				turns("uuBldLBB");
 			} else if (down[0][1] == 'W') {
 				turns("DrBR");
@@ -400,7 +354,7 @@ public class RubiksCube {
 
 			System.out.println("checkpoint");
 			if (back[0][1] == 'W') {
-				char adjacent = top[0][1];
+				char adjacent = up[0][1];
 				if (adjacent == 'B') {
 					turns("BLL");
 				} else if (adjacent == 'R') {
@@ -413,15 +367,42 @@ public class RubiksCube {
 			}
 			System.out.println(this);
 			System.out.println("next step");
-			
-			whiteEdgesInPlace = front[0][1] == 'W' && front[1][0] == 'W' && front[1][2] == 'W'
-					&& front[2][1] == 'W' && left[1][2] == 'B' && right[1][0] == 'G' && down[0][1] == 'O'
-					&& top[2][1] == 'R';
+
+			whiteEdgesInPlace = front[0][1] == 'W' && front[1][0] == 'W' && front[1][2] == 'W' && front[2][1] == 'W'
+					&& left[1][2] == 'B' && right[1][0] == 'G' && down[0][1] == 'O' && up[2][1] == 'R';
 		}
 	}
-	
+
+	// second step: gather the white corners
+	void whiteCorners() {
+		boolean whiteCornersInPlace = front[0][0] == 'W' && up[2][0] == 'R' && left[0][2] == 'B' && front[2][0] == 'W'
+				&& left[2][2] == 'B' && down[0][0] == 'O' && front[2][2] == 'W' && down[0][2] == 'O'
+				&& right[2][0] == 'G' && front[0][2] == 'W' && right[0][0] == 'W' && up[2][2] == 'R';
+
+		while (!whiteCornersInPlace) {
+			
+			
+			if (up[0][0] == 'W') {
+				if (left[0][0] == 'O') {
+					turns("BLBl");
+				} else if (left[0][0] == 'G') {
+					turns("bbDBd");
+				} else if (left[0][0] == 'R') {
+					turns("UBu");
+				} else if (left[0][0] == 'B') {
+					turns("UBu");
+				}
+			}
+
+			whiteCornersInPlace = front[0][0] == 'W' && up[2][0] == 'R' && left[0][2] == 'B' && front[2][0] == 'W'
+					&& left[2][2] == 'B' && down[0][0] == 'O' && front[2][2] == 'W' && down[0][2] == 'O'
+					&& right[2][0] == 'G' && front[0][2] == 'W' && right[0][0] == 'W' && up[2][2] == 'R';
+		}
+	}
+
 	// solve the cube using the Fridrich method
 	void solve() {
 		whiteEdges();
+		whiteCorners();
 	}
 }
