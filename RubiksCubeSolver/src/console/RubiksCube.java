@@ -140,7 +140,7 @@ public class RubiksCube {
 	}
 
 	// turn the cube according to the given algorithm
-	private void turn(String algorithm, int ignroe) {
+	private void turn(String algorithm, int ignore) {
 		RubiksCube copy = copyCube();
 		if (algorithm.equals("U")) {
 			rotate(up);
@@ -489,10 +489,80 @@ public class RubiksCube {
 					&& down[0][2] == 'O';
 		}
 	}
+	
+	int counter;
 
+	// third step: solve the edges for each side face
+	void sideEdges() {
+		boolean sideEdgesInPlace = up[1][0] == 'R' && up[1][2] == 'R' && right[0][1] == 'G'
+				&& right[2][1] == 'G' && down[1][0] == 'O' && down[1][2] == 'O' && left[0][1] == 'B'
+				&& left[2][1] == 'B' && front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W'
+				&& front[2][2] == 'W';
+		
+		while (!sideEdgesInPlace) {
+			System.out.println("START LOOP");
+			if (back[1][0] != 'W' && right[1][2] != 'W'
+					&& back[1][0] != 'Y' && right[1][2] != 'Y') {
+				turns("B");
+			} else if (back[1][2] != 'W' && left[1][0] != 'W'
+					&& back[1][2] != 'Y' && left[1][0] != 'Y') {
+				turns("b");
+			} else if (back[2][1] != 'W' && down[2][1] != 'W'
+					&& back[2][1] != 'Y' && down[2][1] != 'Y') {
+				turns("BB");
+			} else if ((up[1][2] != 'R' || right[0][1] != 'G')
+					&& (up[1][2] != 'Y' && right[0][1] != 'Y')) {
+				turns("RBrbubUBB");
+			} else if ((up[1][0] != 'R' || left[0][1] != 'B')
+					&& (up[1][0] != 'Y' && left[0][1] != 'Y')) {
+				turns("UBublbLB");
+			} else if ((down[1][0] != 'O' || left[1][2] != 'B')
+					&& (down[1][0] != 'Y' && left[1][2] != 'Y')) {
+				turns("LBlbdbD");
+			} else if ((down[1][2] != 'O' || right[1][0] != 'G')
+					&& (down[1][2] != 'Y' && right[1][0] != 'Y')) {
+				turns("rbRBDBd");
+			} else {
+				System.out.println("A SHIFT WAS NOT MADE");
+			}
+			
+			if (back[0][1] == 'O') {
+				if (up[0][1] == 'G') {
+					turns("DBdbrbR");
+				} else if (up[0][1] == 'B') {
+					turns("dbDBLBl");
+				}
+			} else if (back[0][1] == 'R') {
+				if (up[0][1] == 'G') {
+					turns("BBubUBRBr");
+				} else if (up[0][1] == 'B') {
+					turns("BBUBublbL");
+				}
+			} else if (back[0][1] == 'G') {
+				if (up[0][1] == 'R') {
+					turns("BRBrbubU");
+				} else if (up[0][1] == 'O') {
+					turns("BrbRBDBd");
+				}
+			} else if (back[0][1] == 'B') {
+				if (up[0][1] == 'R') {
+					turns("blbLBUBu");
+				} else if (up[0][1] == 'O') {
+					turns("bLBlbdbD");
+				}
+			}
+			
+			sideEdgesInPlace = up[1][0] == 'R' && up[1][2] == 'R' && right[0][1] == 'G'
+					&& right[2][1] == 'G' && down[1][0] == 'O' && down[1][2] == 'O' && left[0][1] == 'B'
+					&& left[2][1] == 'B' && front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W'
+					&& front[2][2] == 'W';
+		}
+	}
+	
 	// solve the cube using the Fridrich method
 	void solve() {
 		whiteEdges();
 		whiteCorners();
+		sideEdges();
 	}
 }
