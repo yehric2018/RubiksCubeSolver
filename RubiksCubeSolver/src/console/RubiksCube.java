@@ -125,7 +125,7 @@ public class RubiksCube {
 	}
 
 	// turn the cube according to each character within the string given
-	private void turns(String turn) {
+	void turns(String turn) {
 		for (int i = 0; i < turn.length(); i++) {
 			turn(turn.charAt(i) + "");
 		}
@@ -261,6 +261,33 @@ public class RubiksCube {
 		return true;
 	}
 
+	// helper method to check if this cube is the same as another cube
+	public boolean isEqual(RubiksCube other) {
+		for (int r = 0; r < 3; r++) {
+			for (int c = 0; c < 3; c++) {
+				if (front[r][c] != other.front[r][c]) {
+					return false;
+				}
+				if (back[r][c] != other.back[r][c]) {
+					return false;
+				}
+				if (left[r][c] != other.left[r][c]) {
+					return false;
+				}
+				if (right[r][c] != other.right[r][c]) {
+					return false;
+				}
+				if (up[r][c] != other.up[r][c]) {
+					return false;
+				}
+				if (down[r][c] != other.down[r][c]) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
 	// helper method to return a copy of the cube
 	RubiksCube copyCube() {
 		char[][] L = copy(left);
@@ -352,7 +379,6 @@ public class RubiksCube {
 				turns("ddDrBRDD");
 			}
 
-			System.out.println("checkpoint");
 			if (back[0][1] == 'W') {
 				char adjacent = up[0][1];
 				if (adjacent == 'B') {
@@ -365,8 +391,6 @@ public class RubiksCube {
 					turns("BBDD");
 				}
 			}
-			System.out.println(this);
-			System.out.println("next step");
 
 			whiteEdgesInPlace = front[0][1] == 'W' && front[1][0] == 'W' && front[1][2] == 'W' && front[2][1] == 'W'
 					&& left[1][2] == 'B' && right[1][0] == 'G' && down[0][1] == 'O' && up[2][1] == 'R';
@@ -375,28 +399,94 @@ public class RubiksCube {
 
 	// second step: gather the white corners
 	void whiteCorners() {
-		boolean whiteCornersInPlace = front[0][0] == 'W' && up[2][0] == 'R' && left[0][2] == 'B' && front[2][0] == 'W'
-				&& left[2][2] == 'B' && down[0][0] == 'O' && front[2][2] == 'W' && down[0][2] == 'O'
-				&& right[2][0] == 'G' && front[0][2] == 'W' && right[0][0] == 'W' && up[2][2] == 'R';
-
+		boolean whiteCornersInPlace = front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W'
+				&& front[2][2] == 'W' && left[0][2] == 'B' && left[2][2] == 'B' && right[2][0] == 'G'
+				&& right[0][0] == 'G' && up[2][0] == 'R' && up[2][2] == 'R' && down[0][0] == 'O'
+				&& down[0][2] == 'O';
+		
 		while (!whiteCornersInPlace) {
-			
-			
+			if (back[0][0] == 'W') {
+				turns("B");
+			} else if (back[2][0] == 'W') {
+				turns("BB");
+			} else if (back[2][2] == 'W') {
+				turns("b");
+			} else if (up[0][2] == 'W') {
+				turns("B");
+			} else if (right[0][2] == 'W') {
+				turns("B");
+			} else if (right[2][2] == 'W') {
+				turns("BB");
+			} else if (down[2][2] == 'W') {
+				turns("BB");
+			} else if (down[2][0] == 'W') {
+				turns("b");
+			} else if (left[2][0] == 'W') {
+				turns("b");
+			} else if (up[2][0] == 'W') {
+				turns("UBub");
+			} else if (up[2][2] == 'W') {
+				turns("uBUB");
+			} else if (right[0][0] == 'W') {
+				turns("uBUB");
+			} else if (right[2][0] == 'W') {
+				turns("rBBR");
+			} else if (down[0][2] == 'W') {
+				turns("rBBR");
+			} else if (down[0][0] == 'W') {
+				turns("dbD");
+			} else if (left[2][2] == 'W') {
+				turns("dbD");
+			} else if (left[0][2] == 'W') {
+				turns("lbL");
+			} else if (front[0][0] == 'W' && up[2][0] != 'R') {
+				turns("UBub");
+			} else if (front[0][2] == 'W' && up[2][2] != 'R') {
+				turns("fUBubF");
+			} else if (front[2][2] == 'W' && down[0][2] != 'O') {
+				turns("FFUBubFF");
+			} else if (front[2][0] == 'W' && down[0][0] != 'O') {
+				turns("fUBubf");
+			}
+
+			System.out.println("checkpoint");
+			// get the white corners into these three positions: back[0][2], up[0][0], left[0][0]
 			if (up[0][0] == 'W') {
 				if (left[0][0] == 'O') {
-					turns("BLBl");
+					turns("FUBuf");
 				} else if (left[0][0] == 'G') {
-					turns("bbDBd");
+					turns("FFUBuFF");
 				} else if (left[0][0] == 'R') {
-					turns("UBu");
+					turns("fUBuF");
 				} else if (left[0][0] == 'B') {
 					turns("UBu");
 				}
+			} else if (back[0][2] == 'W') {
+				if (up[0][0] == 'R') {
+					turns("fUBBubUBuF");
+				} else if (up[0][0] == 'B') {
+					turns("UBBubUBu");
+				} else if (up[0][0] == 'O') {
+					turns("FUBBubUBuf");
+				} else if (up[0][0] == 'G') {
+					turns("FFUBBubUBuFF");
+				}
+			} else if (left[0][0] == 'W') {
+				if (up[0][0] == 'G') {
+					turns("bubU");
+				} else if (up[0][0] == 'O') {
+					turns("BBrbR");
+				} else if (up[0][0] == 'B') {
+					turns("BdbD");
+				} else if (up[0][0] == 'R') {
+					turns("lbL");
+				}
 			}
 
-			whiteCornersInPlace = front[0][0] == 'W' && up[2][0] == 'R' && left[0][2] == 'B' && front[2][0] == 'W'
-					&& left[2][2] == 'B' && down[0][0] == 'O' && front[2][2] == 'W' && down[0][2] == 'O'
-					&& right[2][0] == 'G' && front[0][2] == 'W' && right[0][0] == 'W' && up[2][2] == 'R';
+			whiteCornersInPlace = front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W'
+					&& front[2][2] == 'W' && left[0][2] == 'B' && left[2][2] == 'B' && right[2][0] == 'G'
+					&& right[0][0] == 'G' && up[2][0] == 'R' && up[2][2] == 'R' && down[0][0] == 'O'
+					&& down[0][2] == 'O';
 		}
 	}
 

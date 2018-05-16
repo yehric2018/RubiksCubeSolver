@@ -20,11 +20,5 @@ public class Tester {
 			System.out.println("START SOLVING NOW\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 			cube.whiteCorners();
 		}
-		System.out.println(cube);
-//		if (scan.next().equals("solve")) {
-//			System.out.println("START SOLVING NOW\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-//			cube.whiteCorners();
-//		}
-//		System.out.println(cube);
 	}
 }
