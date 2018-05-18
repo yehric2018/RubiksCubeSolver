@@ -1,7 +1,5 @@
 package console;
 
-import java.util.ArrayList;
-
 public class RubiksCube {
 
 	public RubiksCube(char[][] front, char[][] back, char[][] left, char[][] right, char[][] up, char[][] down) {
@@ -15,18 +13,7 @@ public class RubiksCube {
 
 	public RubiksCube() {
 		init();
-		moves.add("U");
-		moves.add("D");
-		moves.add("R");
-		moves.add("L");
-		moves.add("F");
-		moves.add("B");
-		moves.add("u");
-		moves.add("d");
-		moves.add("r");
-		moves.add("l");
-		moves.add("f");
-		moves.add("b");
+		bag.add(this);
 	}
 
 	// hold the data of each side of the cube
@@ -38,15 +25,59 @@ public class RubiksCube {
 	char[][] back;
 
 	// each of the twelve moves that can happen for any given cube
-	ArrayList<String> moves = new ArrayList<String>();
-
+	String[] moves = { "U", "D", "R", "L", "F", "B", "u", "d", "r", "l", "f", "b"};
+	
+	Bag bag = new Bag();
+	
+//	String generateSolutions() {
+//		boolean counter = true;
+//		while (counter) {
+//			if (solved()) {
+//				
+//			}
+//		}
+//	}
+	
+	String generateSolution() {
+		if (solved()) {
+			return "";
+		} else {
+			for (int i = 0; i < 12; i++) {
+				if (solutions[i].length() < 25) {
+					RubiksCube copy = copyCube();
+					copy.turn(moves[i]);
+					copy.bag.combine(bag);
+					bag.combine(copy.bag);
+					if (!bag.contains(copy)) {
+						solutions[i] = moves[i] + copy.generateSolution();
+//						bag.add(copy);
+					}
+				}
+			}
+			
+			for (int i = 0; i < 12; i++) {
+				String solution = solutions[i];
+				RubiksCube copy = copyCube();
+				copy.turns(solution);
+				if (copy.solved()) {
+					return solution;
+				}
+			}
+			return "ERROR";
+		}
+	}
+	
+	boolean[] checked = new boolean[12];
+	String[] solutions = {"", "", "", "", "", "", "", "", "", "", "", ""};
+	
+	
 	// scramble the cube
 	void scramble() {
 		// randomly select an algorithm to run 20 times
 		for (int i = 0; i < 20; i++) {
 			int rand = (int) (Math.random() * 12);
-			System.out.println(moves.get(rand));
-			turn(moves.get(rand));
+//			System.out.println(moves[rand]);
+			turn(moves[rand]);
 		}
 	}
 
@@ -64,35 +95,10 @@ public class RubiksCube {
 		for (int r = 0; r < front.length; r++) {
 			for (int c = 0; c < front.length; c++) {
 				front[r][c] = 'W';
-			}
-		}
-
-		for (int r = 0; r < front.length; r++) {
-			for (int c = 0; c < front.length; c++) {
 				up[r][c] = 'R';
-			}
-		}
-
-		for (int r = 0; r < front.length; r++) {
-			for (int c = 0; c < front.length; c++) {
 				back[r][c] = 'Y';
-			}
-		}
-
-		for (int r = 0; r < front.length; r++) {
-			for (int c = 0; c < front.length; c++) {
 				down[r][c] = 'O';
-			}
-		}
-
-		for (int r = 0; r < front.length; r++) {
-			for (int c = 0; c < front.length; c++) {
 				left[r][c] = 'B';
-			}
-		}
-
-		for (int r = 0; r < front.length; r++) {
-			for (int c = 0; c < front.length; c++) {
 				right[r][c] = 'G';
 			}
 		}
@@ -133,10 +139,10 @@ public class RubiksCube {
 
 	// turn the cube according to a certain given algorithm
 	void turn(String algorithm) {
-		System.out.println("algorithm is " + algorithm);
+//		System.out.println("algorithm is " + algorithm);
 		// by calling with an ignore value, displaying the cube is easier
 		turn(algorithm, -1);
-		System.out.println(this);
+//		System.out.println(this);
 	}
 
 	// turn the cube according to the given algorithm
@@ -226,6 +232,50 @@ public class RubiksCube {
 			front[0][2] = copy.down[0][2];
 			front[1][2] = copy.down[1][2];
 			front[2][2] = copy.down[2][2];
+		} else if (algorithm.equals("I")) {
+			// inner side parallel to left and right
+			front[0][1] = copy.up[0][1];
+			front[1][1] = copy.up[1][1];
+			front[2][1] = copy.up[2][1];
+			down[0][1] = copy.front[0][1];
+			down[1][1] = copy.front[1][1];
+			down[2][1] = copy.front[2][1];
+			back[2][1] = copy.down[0][1];
+			back[1][1] = copy.down[1][1];
+			back[0][1] = copy.down[2][1];
+			up[2][1] = copy.back[0][1];
+			up[1][1] = copy.back[1][1];
+			up[0][1] = copy.back[2][1];
+		} else if (algorithm.equals("M")) {
+			// middle side parallel to up and down
+			front[1][0] = copy.left[1][0];
+			front[1][1] = copy.left[1][1];
+			front[1][2] = copy.left[1][2];
+			right[1][0] = copy.front[1][0];
+			right[1][1] = copy.right[1][1];
+			right[1][2] = copy.right[1][2];
+			back[1][0] = copy.right[1][0];
+			back[1][1] = copy.right[1][1];
+			back[1][2] = copy.right[1][2];
+			left[1][0] = copy.back[1][0];
+			left[1][1] = copy.back[1][1];
+			left[1][2] = copy.back[1][2];
+		} else if (algorithm.equals("C")) {
+			// center side parallel to front and back
+			up[1][0] = copy.left[2][1];
+			up[1][1] = copy.left[1][1];
+			up[1][2] = copy.left[0][1];
+			right[0][1] = copy.up[1][0];
+			right[1][1] = copy.up[1][1];
+			right[2][1] = copy.up[1][2];
+			down[1][0] = copy.right[2][1];
+			down[1][1] = copy.right[1][1];
+			down[1][2] = copy.right[0][1];
+			left[0][1] = copy.down[1][0];
+			left[1][1] = copy.down[1][1];
+			left[2][1] = copy.down[1][2];
+		} else if (algorithm.equals("N")) {
+			// do nothing
 		} else {
 			for (int i = 0; i < 3; i++) {
 				turn(algorithm.toUpperCase(), -1);
@@ -287,7 +337,7 @@ public class RubiksCube {
 		}
 		return true;
 	}
-	
+
 	// helper method to return a copy of the cube
 	RubiksCube copyCube() {
 		char[][] L = copy(left);
@@ -401,9 +451,8 @@ public class RubiksCube {
 	void whiteCorners() {
 		boolean whiteCornersInPlace = front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W'
 				&& front[2][2] == 'W' && left[0][2] == 'B' && left[2][2] == 'B' && right[2][0] == 'G'
-				&& right[0][0] == 'G' && up[2][0] == 'R' && up[2][2] == 'R' && down[0][0] == 'O'
-				&& down[0][2] == 'O';
-		
+				&& right[0][0] == 'G' && up[2][0] == 'R' && up[2][2] == 'R' && down[0][0] == 'O' && down[0][2] == 'O';
+
 		while (!whiteCornersInPlace) {
 			if (back[0][0] == 'W') {
 				turns("B");
@@ -450,7 +499,8 @@ public class RubiksCube {
 			}
 
 			System.out.println("checkpoint");
-			// get the white corners into these three positions: back[0][2], up[0][0], left[0][0]
+			// get the white corners into these three positions: back[0][2],
+			// up[0][0], left[0][0]
 			if (up[0][0] == 'W') {
 				if (left[0][0] == 'O') {
 					turns("FUBuf");
@@ -483,49 +533,38 @@ public class RubiksCube {
 				}
 			}
 
-			whiteCornersInPlace = front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W'
-					&& front[2][2] == 'W' && left[0][2] == 'B' && left[2][2] == 'B' && right[2][0] == 'G'
-					&& right[0][0] == 'G' && up[2][0] == 'R' && up[2][2] == 'R' && down[0][0] == 'O'
-					&& down[0][2] == 'O';
+			whiteCornersInPlace = front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W' && front[2][2] == 'W'
+					&& left[0][2] == 'B' && left[2][2] == 'B' && right[2][0] == 'G' && right[0][0] == 'G'
+					&& up[2][0] == 'R' && up[2][2] == 'R' && down[0][0] == 'O' && down[0][2] == 'O';
 		}
 	}
-	
-	int counter;
 
 	// third step: solve the edges for each side face
 	void sideEdges() {
-		boolean sideEdgesInPlace = up[1][0] == 'R' && up[1][2] == 'R' && right[0][1] == 'G'
-				&& right[2][1] == 'G' && down[1][0] == 'O' && down[1][2] == 'O' && left[0][1] == 'B'
-				&& left[2][1] == 'B' && front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W'
-				&& front[2][2] == 'W';
-		
+		boolean sideEdgesInPlace = up[1][0] == 'R' && up[1][2] == 'R' && right[0][1] == 'G' && right[2][1] == 'G'
+				&& down[1][0] == 'O' && down[1][2] == 'O' && left[0][1] == 'B' && left[2][1] == 'B'
+				&& front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W' && front[2][2] == 'W';
+
 		while (!sideEdgesInPlace) {
 			System.out.println("START LOOP");
-			if (back[1][0] != 'W' && right[1][2] != 'W'
-					&& back[1][0] != 'Y' && right[1][2] != 'Y') {
+			if (back[1][0] != 'W' && right[1][2] != 'W' && back[1][0] != 'Y' && right[1][2] != 'Y') {
 				turns("B");
-			} else if (back[1][2] != 'W' && left[1][0] != 'W'
-					&& back[1][2] != 'Y' && left[1][0] != 'Y') {
+			} else if (back[1][2] != 'W' && left[1][0] != 'W' && back[1][2] != 'Y' && left[1][0] != 'Y') {
 				turns("b");
-			} else if (back[2][1] != 'W' && down[2][1] != 'W'
-					&& back[2][1] != 'Y' && down[2][1] != 'Y') {
+			} else if (back[2][1] != 'W' && down[2][1] != 'W' && back[2][1] != 'Y' && down[2][1] != 'Y') {
 				turns("BB");
-			} else if ((up[1][2] != 'R' || right[0][1] != 'G')
-					&& (up[1][2] != 'Y' && right[0][1] != 'Y')) {
+			} else if ((up[1][2] != 'R' || right[0][1] != 'G') && (up[1][2] != 'Y' && right[0][1] != 'Y')) {
 				turns("RBrbubUBB");
-			} else if ((up[1][0] != 'R' || left[0][1] != 'B')
-					&& (up[1][0] != 'Y' && left[0][1] != 'Y')) {
+			} else if ((up[1][0] != 'R' || left[0][1] != 'B') && (up[1][0] != 'Y' && left[0][1] != 'Y')) {
 				turns("UBublbLB");
-			} else if ((down[1][0] != 'O' || left[1][2] != 'B')
-					&& (down[1][0] != 'Y' && left[1][2] != 'Y')) {
+			} else if ((down[1][0] != 'O' || left[1][2] != 'B') && (down[1][0] != 'Y' && left[1][2] != 'Y')) {
 				turns("LBlbdbD");
-			} else if ((down[1][2] != 'O' || right[1][0] != 'G')
-					&& (down[1][2] != 'Y' && right[1][0] != 'Y')) {
+			} else if ((down[1][2] != 'O' || right[1][0] != 'G') && (down[1][2] != 'Y' && right[1][0] != 'Y')) {
 				turns("rbRBDBd");
 			} else {
 				System.out.println("A SHIFT WAS NOT MADE");
 			}
-			
+
 			if (back[0][1] == 'O') {
 				if (up[0][1] == 'G') {
 					turns("DBdbrbR");
@@ -551,18 +590,75 @@ public class RubiksCube {
 					turns("bLBlbdbD");
 				}
 			}
-			
-			sideEdgesInPlace = up[1][0] == 'R' && up[1][2] == 'R' && right[0][1] == 'G'
-					&& right[2][1] == 'G' && down[1][0] == 'O' && down[1][2] == 'O' && left[0][1] == 'B'
-					&& left[2][1] == 'B' && front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W'
-					&& front[2][2] == 'W';
+
+			sideEdgesInPlace = up[1][0] == 'R' && up[1][2] == 'R' && right[0][1] == 'G' && right[2][1] == 'G'
+					&& down[1][0] == 'O' && down[1][2] == 'O' && left[0][1] == 'B' && left[2][1] == 'B'
+					&& front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W' && front[2][2] == 'W';
+		}
+	}
+
+	// fourth step: solve the yellow side
+	void yellowSide() {
+		// search up all possible combinations for the last layer orientation
+		boolean yellowSideSolved = back[0][0] == 'Y' && back[0][1] == 'Y' && back[0][2] == 'Y' && back[1][0] == 'Y'
+				&& back[1][1] == 'Y' && back[1][2] == 'Y' && back[2][0] == 'Y' && back[2][1] == 'Y'
+				&& back[2][2] == 'Y';
+
+		while (!yellowSideSolved) {
+			if (back[0][1] == 'Y' && back[1][1] == 'Y' && back[1][0] == 'Y') {
+				turns("UMRBrbum");
+			} else if (back[0][1] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y') {
+				turns("b");
+			} else if (back[2][1] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y') {
+				turns("BB");
+			} else if (back[2][1] == 'Y' && back[1][1] == 'Y' && back[1][0] == 'Y') {
+				turns("B");
+			} else if (back[0][1] == 'Y' && back[1][1] == 'Y' && back[2][1] == 'Y') {
+				turns("B");
+			} else if (back[1][0] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y') {
+				turns("URBrbu");
+			} else if (back[0][1] == 'Y' && back[1][0] == 'Y' && back[1][2] == 'Y' && back[2][1] == 'Y'
+					&& back[0][0] != 'Y' && back[0][2] != 'Y' && back[2][0] != 'Y' && back[2][2] != 'Y') {
+				if (up[0][0] == 'Y' && up[0][2] == 'Y') {
+					turns("RBrBRBBr");
+				} else if (right[0][2] == 'Y' && right[2][2] == 'Y') {
+					turns("B");
+				} else if (down[2][0] == 'Y' && right[2][2] == 'Y') {
+					turns("BB");
+				} else if (left[0][0] == 'Y' && left[2][0] == 'Y') {
+					turns("b");
+				}
+			} else if (back[0][1] == 'Y' && back[1][0] == 'Y' && back[1][2] == 'Y' && back[2][1] == 'Y'
+					&& back[0][0] == 'Y' && back[0][2] != 'Y' && back[2][0] != 'Y' && back[2][2] == 'Y') {
+				turns("B");
+			} else if (back[0][1] == 'Y' && back[1][0] == 'Y' && back[1][2] == 'Y' && back[2][1] == 'Y'
+					&& back[0][0] != 'Y' && back[0][2] == 'Y' && back[2][0] == 'Y' && back[2][2] != 'Y') {
+				turns("URBrbu");
+			} else if (back[0][0] == 'Y' && back[0][1] == 'Y' && back[0][2] == 'Y'
+					&& back[1][0] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y'
+					&& back[2][0] != 'Y' && back[2][1] == 'Y' && back[2][2] != 'Y') {
+				turns("BB");
+			} else if (back[0][0] != 'Y' && back[0][1] == 'Y' && back[0][2] != 'Y'
+					&& back[1][0] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y'
+					&& back[2][0] == 'Y' && back[2][1] == 'Y' && back[2][2] == 'Y') {
+				turns("");
+			} else if (back[0][0] == 'Y' && back[0][1] == 'Y' && back[0][2] == 'Y'
+					&& back[1][0] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y'
+					&& back[2][0] != 'Y' && back[2][1] == 'Y' && back[2][2] != 'Y') {
+				
+			}
+
+			yellowSideSolved = back[0][0] == 'Y' && back[0][1] == 'Y' && back[0][2] == 'Y' && back[1][0] == 'Y'
+					&& back[1][1] == 'Y' && back[1][2] == 'Y' && back[2][0] == 'Y' && back[2][1] == 'Y'
+					&& back[2][2] == 'Y';
 		}
 	}
 	
 	// solve the cube using the Fridrich method
-	void solve() {
-		whiteEdges();
-		whiteCorners();
-		sideEdges();
-	}
+	 void solve() {
+		 whiteEdges();
+		 whiteCorners();
+		 sideEdges();
+		 yellowSide();
+	 }
 }
