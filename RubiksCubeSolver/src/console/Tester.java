@@ -2,13 +2,16 @@ package console;
 
 import java.util.Scanner;
 
+import gfx.Program;
+
 public class Tester {
 
 	public static void main(String[] args) {
-		RubiksCube cube = new RubiksCube();
-		System.out.println(cube);
-
-		cube.scramble();
+//		RubiksCube cube = new RubiksCube();
+//		System.out.println(cube);
+		Program program = new Program("Rubik's Cube", 500, 500);
+		program.start();
+//		cube.scramble();
 //		Scanner scan = new Scanner(System.in);
 //		if (scan.next().equals("solve")) {
 //			System.out.println("START SOLVING NOW\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
@@ -27,8 +30,8 @@ public class Tester {
 //		System.out.println(cube.generateSolution());
 		
 //		System.out.println(cube.generateSolution());
-		cube.solve();
-		System.out.println(cube);
+//		cube.solve();
+//		System.out.println(cube);
 		
 //		for (int i = 0; i < 20; i++) {
 //			cube.scramble();
