@@ -13,7 +13,6 @@ public class RubiksCube {
 
 	public RubiksCube() {
 		init();
-		bag.add(this);
 	}
 
 	// hold the data of each side of the cube
@@ -26,46 +25,6 @@ public class RubiksCube {
 
 	// each of the twelve moves that can happen for any given cube
 	String[] moves = { "U", "D", "R", "L", "F", "B", "u", "d", "r", "l", "f", "b"};
-	
-	Bag bag = new Bag();
-	
-//	String generateSolutions() {
-//		boolean counter = true;
-//		while (counter) {
-//			if (solved()) {
-//				
-//			}
-//		}
-//	}
-	
-	String generateSolution() {
-		if (solved()) {
-			return "";
-		} else {
-			for (int i = 0; i < 12; i++) {
-				if (solutions[i].length() < 25) {
-					RubiksCube copy = copyCube();
-					copy.turn(moves[i]);
-					copy.bag.combine(bag);
-					bag.combine(copy.bag);
-					if (!bag.contains(copy)) {
-						solutions[i] = moves[i] + copy.generateSolution();
-//						bag.add(copy);
-					}
-				}
-			}
-			
-			for (int i = 0; i < 12; i++) {
-				String solution = solutions[i];
-				RubiksCube copy = copyCube();
-				copy.turns(solution);
-				if (copy.solved()) {
-					return solution;
-				}
-			}
-			return "ERROR";
-		}
-	}
 	
 	boolean[] checked = new boolean[12];
 	String[] solutions = {"", "", "", "", "", "", "", "", "", "", "", ""};
@@ -135,14 +94,14 @@ public class RubiksCube {
 		for (int i = 0; i < turn.length(); i++) {
 			turn(turn.charAt(i) + "");
 		}
+		System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 	}
 
 	// turn the cube according to a certain given algorithm
 	void turn(String algorithm) {
-//		System.out.println("algorithm is " + algorithm);
-		// by calling with an ignore value, displaying the cube is easier
+		System.out.println("algorithm is " + algorithm);
 		turn(algorithm, -1);
-//		System.out.println(this);
+		System.out.println(this);
 	}
 
 	// turn the cube according to the given algorithm
@@ -498,7 +457,7 @@ public class RubiksCube {
 				turns("fUBubf");
 			}
 
-			System.out.println("checkpoint");
+//			System.out.println("checkpoint");
 			// get the white corners into these three positions: back[0][2],
 			// up[0][0], left[0][0]
 			if (up[0][0] == 'W') {
@@ -546,7 +505,7 @@ public class RubiksCube {
 				&& front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W' && front[2][2] == 'W';
 
 		while (!sideEdgesInPlace) {
-			System.out.println("START LOOP");
+//			System.out.println("START LOOP");
 			if (back[1][0] != 'W' && right[1][2] != 'W' && back[1][0] != 'Y' && right[1][2] != 'Y') {
 				turns("B");
 			} else if (back[1][2] != 'W' && left[1][0] != 'W' && back[1][2] != 'Y' && left[1][0] != 'Y') {
@@ -557,12 +516,12 @@ public class RubiksCube {
 				turns("RBrbubUBB");
 			} else if ((up[1][0] != 'R' || left[0][1] != 'B') && (up[1][0] != 'Y' && left[0][1] != 'Y')) {
 				turns("UBublbLB");
-			} else if ((down[1][0] != 'O' || left[1][2] != 'B') && (down[1][0] != 'Y' && left[1][2] != 'Y')) {
+			} else if ((down[1][0] != 'O' || left[2][1] != 'B') && (down[1][0] != 'Y' && left[2][1] != 'Y')) {
 				turns("LBlbdbD");
 			} else if ((down[1][2] != 'O' || right[1][0] != 'G') && (down[1][2] != 'Y' && right[1][0] != 'Y')) {
 				turns("rbRBDBd");
 			} else {
-				System.out.println("A SHIFT WAS NOT MADE");
+//				System.out.println("A SHIFT WAS NOT MADE");
 			}
 
 			if (back[0][1] == 'O') {
@@ -605,49 +564,91 @@ public class RubiksCube {
 				&& back[2][2] == 'Y';
 
 		while (!yellowSideSolved) {
-			if (back[0][1] == 'Y' && back[1][1] == 'Y' && back[1][0] == 'Y') {
-				turns("UMRBrbum");
-			} else if (back[0][1] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y') {
-				turns("b");
-			} else if (back[2][1] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y') {
-				turns("BB");
-			} else if (back[2][1] == 'Y' && back[1][1] == 'Y' && back[1][0] == 'Y') {
-				turns("B");
-			} else if (back[0][1] == 'Y' && back[1][1] == 'Y' && back[2][1] == 'Y') {
-				turns("B");
-			} else if (back[1][0] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y') {
-				turns("URBrbu");
-			} else if (back[0][1] == 'Y' && back[1][0] == 'Y' && back[1][2] == 'Y' && back[2][1] == 'Y'
-					&& back[0][0] != 'Y' && back[0][2] != 'Y' && back[2][0] != 'Y' && back[2][2] != 'Y') {
-				if (up[0][0] == 'Y' && up[0][2] == 'Y') {
+			System.out.println("SOLVING THE YELLOW SIDE NOW");
+			if (back[0][0] != 'Y' && back[0][1] == 'Y' && back[0][2] == 'Y'
+					&& back[1][0] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y'
+					&& back[2][0] == 'Y' && back[2][1] == 'Y' && back[2][2] == 'Y') {
+				if (up[0][2] == 'Y') {
 					turns("RBrBRBBr");
-				} else if (right[0][2] == 'Y' && right[2][2] == 'Y') {
-					turns("B");
-				} else if (down[2][0] == 'Y' && right[2][2] == 'Y') {
-					turns("BB");
-				} else if (left[0][0] == 'Y' && left[2][0] == 'Y') {
-					turns("b");
+				} else if (left[2][0] == 'Y') {
+					turns("dbDbdBBD");
 				}
-			} else if (back[0][1] == 'Y' && back[1][0] == 'Y' && back[1][2] == 'Y' && back[2][1] == 'Y'
-					&& back[0][0] == 'Y' && back[0][2] != 'Y' && back[2][0] != 'Y' && back[2][2] == 'Y') {
+			} else if (back[0][0] == 'Y' && back[0][1] == 'Y' && back[0][2] != 'Y'
+					&& back[1][0] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y'
+					&& back[2][0] != 'Y' && back[2][1] == 'Y' && back[2][2] != 'Y') {
 				turns("B");
-			} else if (back[0][1] == 'Y' && back[1][0] == 'Y' && back[1][2] == 'Y' && back[2][1] == 'Y'
-					&& back[0][0] != 'Y' && back[0][2] == 'Y' && back[2][0] == 'Y' && back[2][2] != 'Y') {
+			} else if (back[0][0] != 'Y' && back[0][1] == 'Y' && back[0][2] != 'Y'
+					&& back[1][0] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y'
+					&& back[2][0] != 'Y' && back[2][1] == 'Y' && back[2][2] == 'Y') {
+				turns("b");
+			} else if (back[0][0] != 'Y' && back[0][1] == 'Y' && back[0][2] != 'Y'
+					&& back[1][0] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y'
+					&& back[2][0] == 'Y' && back[2][1] == 'Y' && back[2][2] != 'Y') {
+				turns("BB");
+			} else if (back[0][1] != 'Y' && back[1][0] == 'Y' &&
+					back[1][1] == 'Y' && back[1][2] == 'Y' && back[2][1] != 'Y') {
 				turns("URBrbu");
+			} else if (back[0][1] == 'Y' && back[1][0] != 'Y'
+					&& back[1][1] == 'Y' && back[1][2] != 'Y'
+					&& back[2][1] == 'Y') {
+				turns("B");
+			} else if (back[0][0] == 'Y' && back[0][1] == 'Y' && back[0][2] != 'Y'
+					&& back[1][0] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y'
+					&& back[2][0] != 'Y' && back[2][1] == 'Y' && back[2][2] == 'Y') {
+				if (up[0][0] != 'Y') {
+					turns("BB");
+				}
+				turns("lbLblBBL");
+			} else if (back[0][0] != 'Y' && back[0][1] == 'Y' && back[0][2] == 'Y'
+					&& back[1][0] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y'
+					&& back[2][0] == 'Y' && back[2][1] == 'Y' && back[2][2] != 'Y') {
+				turns("B");
 			} else if (back[0][0] == 'Y' && back[0][1] == 'Y' && back[0][2] == 'Y'
 					&& back[1][0] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y'
 					&& back[2][0] != 'Y' && back[2][1] == 'Y' && back[2][2] != 'Y') {
+				if (down[2][0] == 'Y' && down[2][2] == 'Y') {
+					turns("rBlBRbLBBrBR");
+				} else {
+					turns("drURDruR");
+				}
+			} else if (back[0][0] == 'Y' && back[0][1] == 'Y' && back[0][2] != 'Y'
+					&& back[1][0] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y'
+					&& back[2][0] == 'Y' && back[2][1] == 'Y' && back[2][2] != 'Y') {
+				turns("B");
+			} else if (back[0][0] != 'Y' && back[0][1] == 'Y' && back[0][2] != 'Y'
+					&& back[1][0] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y'
+					&& back[2][0] == 'Y' && back[2][1] == 'Y' && back[2][2] == 'Y') {
 				turns("BB");
 			} else if (back[0][0] != 'Y' && back[0][1] == 'Y' && back[0][2] != 'Y'
 					&& back[1][0] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y'
 					&& back[2][0] == 'Y' && back[2][1] == 'Y' && back[2][2] == 'Y') {
-				turns("");
-			} else if (back[0][0] == 'Y' && back[0][1] == 'Y' && back[0][2] == 'Y'
+				turns("b");
+			} else if (back[0][0] != 'Y' && back[0][1] == 'Y' && back[0][2] != 'Y'
 					&& back[1][0] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y'
 					&& back[2][0] != 'Y' && back[2][1] == 'Y' && back[2][2] != 'Y') {
-				
+				if (up[0][0] == 'Y' && up[0][2] == 'Y') {
+					turns("RBrBRBBr");
+				} else if (left[0][0] == 'Y' && left[2][0] == 'Y') {
+					turns("b");
+				} else if (down[2][0] == 'Y' && left[2][2] == 'Y') {
+					turns("BB");
+				} else if (right[0][2] == 'Y' && right[2][2] == 'Y') {
+					turns("B");
+				} else {
+					turns("RBrBRBBr");
+				}
+			} else if (back[0][1] == 'Y' && back[1][0] == 'Y' && back[1][1] == 'Y') {
+				turns("RBrBRBBr");
+			} else if (back[0][1] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y') {
+				turns("b");
+			} else if (back[1][1] == 'Y' && back[1][2] == 'Y' && back[2][1] == 'Y') {
+				turns("BB");
+			} else if (back[1][0] == 'Y' && back[1][1] == 'Y' && back[2][1] == 'Y') {
+				turns("B");
+			} else {
+				turns("URBrbu");
 			}
-
+			
 			yellowSideSolved = back[0][0] == 'Y' && back[0][1] == 'Y' && back[0][2] == 'Y' && back[1][0] == 'Y'
 					&& back[1][1] == 'Y' && back[1][2] == 'Y' && back[2][0] == 'Y' && back[2][1] == 'Y'
 					&& back[2][2] == 'Y';
@@ -659,6 +660,6 @@ public class RubiksCube {
 		 whiteEdges();
 		 whiteCorners();
 		 sideEdges();
-		 yellowSide();
+//		 yellowSide();
 	 }
 }
