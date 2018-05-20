@@ -1,5 +1,7 @@
 package console;
 
+import java.util.ArrayList;
+
 public class RubiksCube {
 
 	public RubiksCube(char[][] front, char[][] back, char[][] left, char[][] right, char[][] up, char[][] down) {
@@ -388,6 +390,7 @@ public class RubiksCube {
 				turns("ddDrBRDD");
 			}
 
+			System.out.println("WHITE EDGES PART 2");
 			if (back[0][1] == 'W') {
 				char adjacent = up[0][1];
 				if (adjacent == 'B') {
@@ -455,12 +458,18 @@ public class RubiksCube {
 			} else if (front[2][2] == 'W' && down[0][2] != 'O') {
 				turns("FFUBubFF");
 			} else if (front[2][0] == 'W' && down[0][0] != 'O') {
-				turns("fUBubf");
+				turns("fUBubF");
+			}
+			
+			boolean whiteEdgesInPlace = front[0][1] == 'W' && front[1][0] == 'W' && front[1][2] == 'W' && front[2][1] == 'W'
+					&& left[1][2] == 'B' && right[1][0] == 'G' && down[0][1] == 'O' && up[2][1] == 'R';
+
+			if (!whiteEdgesInPlace) {
+				System.out.println("WHITE EDGES TURNED OUT OF PLACE");
+				System.exit(0);
 			}
 
-			// System.out.println("checkpoint");
-			// get the white corners into these three positions: back[0][2],
-			// up[0][0], left[0][0]
+			System.out.println("WHITE CORNERS PART 2");
 			if (up[0][0] == 'W') {
 				if (left[0][0] == 'O') {
 					turns("FUBuf");
@@ -492,7 +501,15 @@ public class RubiksCube {
 					turns("lbL");
 				}
 			}
+			
+			whiteEdgesInPlace = front[0][1] == 'W' && front[1][0] == 'W' && front[1][2] == 'W' && front[2][1] == 'W'
+					&& left[1][2] == 'B' && right[1][0] == 'G' && down[0][1] == 'O' && up[2][1] == 'R';
 
+			if (!whiteEdgesInPlace) {
+				System.out.println("WHITE EDGES TURNED OUT OF PLACE");
+				System.exit(0);
+			}
+			
 			whiteCornersInPlace = front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W' && front[2][2] == 'W'
 					&& left[0][2] == 'B' && left[2][2] == 'B' && right[2][0] == 'G' && right[0][0] == 'G'
 					&& up[2][0] == 'R' && up[2][2] == 'R' && down[0][0] == 'O' && down[0][2] == 'O';
@@ -507,7 +524,6 @@ public class RubiksCube {
 
 		while (!sideEdgesInPlace) {
 			System.out.println("SOLVING SIDE EDGES NOW");
-			// System.out.println("START LOOP");
 			if (back[1][0] != 'W' && right[1][2] != 'W' && back[1][0] != 'Y' && right[1][2] != 'Y') {
 				turns("B");
 			} else if (back[1][2] != 'W' && left[1][0] != 'W' && back[1][2] != 'Y' && left[1][0] != 'Y') {
@@ -526,6 +542,7 @@ public class RubiksCube {
 				// System.out.println("A SHIFT WAS NOT MADE");
 			}
 
+			System.out.println("SIDE EDGES PART 2");
 			if (back[0][1] == 'O') {
 				if (up[0][1] == 'G') {
 					turns("DBdbrbR");
@@ -552,6 +569,23 @@ public class RubiksCube {
 				}
 			}
 
+			boolean whiteEdgesInPlace = front[0][1] == 'W' && front[1][0] == 'W' && front[1][2] == 'W' && front[2][1] == 'W'
+					&& left[1][2] == 'B' && right[1][0] == 'G' && down[0][1] == 'O' && up[2][1] == 'R';
+
+			if (!whiteEdgesInPlace) {
+				System.out.println("WHITE EDGES TURNED OUT OF PLACE");
+				System.exit(0);
+			}
+			
+			boolean whiteCornersInPlace = front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W'
+					&& front[2][2] == 'W' && left[0][2] == 'B' && left[2][2] == 'B' && right[2][0] == 'G'
+					&& right[0][0] == 'G' && up[2][0] == 'R' && up[2][2] == 'R' && down[0][0] == 'O' && down[0][2] == 'O';
+
+			if (!whiteCornersInPlace) {
+				System.out.println("WHITE CORNERS TURNED OUT OF PLACE");
+				System.exit(0);
+			}
+			
 			sideEdgesInPlace = up[1][0] == 'R' && up[1][2] == 'R' && right[0][1] == 'G' && right[2][1] == 'G'
 					&& down[1][0] == 'O' && down[1][2] == 'O' && left[0][1] == 'B' && left[2][1] == 'B'
 					&& front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W' && front[2][2] == 'W';
@@ -565,6 +599,7 @@ public class RubiksCube {
 				&& back[2][0] == 'Y' && back[2][1] == 'Y' && back[2][2] == 'Y';
 		
 		while (!yellowSideSolved) {
+			System.out.println("SOLVING YELLOW SIDE");
 			if (back[1][0] == 'Y' && back[1][2] == 'Y' && back[0][1] != 'Y' && back[2][1] != 'Y') {
 				// LINE
 				turns("URBrbu");
@@ -633,57 +668,23 @@ public class RubiksCube {
 				} else if (back[0][0] != 'Y' && back[0][2] == 'Y' && back[2][2] != 'Y' && back[2][0] == 'Y') {
 					turns("B");
 				}
-				
-				
-				
-				
-//				if (back[0][0] == 'Y' && back[0][2] == 'Y') {
-//					if (up[0][0] == 'Y' && up[0][2] == 'Y') {
-//						turns("RRFrBBRfrBBr");
-//					} else {
-//						turns("BiRBrbIrURu");
-//					}
-//				} else if (back[0][0] == 'Y') {
-//					turns("B");
-//				} else if (back[0][2] == 'Y') {
-//					if (up[0][2] == 'Y') {
-//						turns("RBrBRBBr");
-//					} else {
-//						turns("BBrbRbrBBR");
-//					}
-//				} else if (back[2][0] == 'Y') {
-//					turns("BB");
-//				} else if (back[2][2] == 'Y') {
-//					turns("b");
-//				} else if (up[0][0] == 'Y' && up[0][2] == 'Y' && down[2][0] == 'Y' && down[2][2] == 'Y') {
-//					turns("URBrbRBrbRBrbu");
-//				} else if (left[0][0] == 'Y' && left[2][0] == 'Y' && right[0][2] == 'Y' && right[2][2] == 'Y') {
-//					turns("B");
-//				} else if (up[0][0] == 'Y' && up[0][2] == 'Y' && down[2][0] != 'Y' && down[2][2] != 'Y') {
-//					turns("B");
-//				} else if (up[0][0] != 'Y' && up[0][2] != 'Y' && down[2][0] == 'Y' && down[2][2] == 'Y') {
-//					turns("b");
-//				} else if (left[0][0] == 'Y' && left[2][0] == 'Y' && right[0][2] == 'Y' && right[2][2] == 'Y') {
-//					turns("RBBRRbRRbRRBBR");
-//				} else if (left[0][0] == 'Y' && left[2][0] == 'Y' && right[0][2] == 'Y' && right[2][2] == 'Y') {
-//					turns("BB");
-//				} else if (back[0][0] == 'Y' && back[0][2] == 'Y') {
-//					if (up[0][0] == 'Y' && up[0][2] == 'Y') {
-//						turns("RRFrBBRfrBBr");
-//					} else {
-//						turns("BiRBrbIrURu");
-//					}
-//				} else if (back[0][0] == 'Y' && back[2][0] == 'Y') {
-//					turns("B");
-//				} else if (back[2][0] == 'Y' && back[2][2] == 'Y') {
-//					turns("BB");
-//				} else if (back[2][2] == 'Y' && back[0][2] == 'Y') {
-//					turns("b");
-//				} else if (back[0][0] == 'Y' && back[2][2] == 'Y') {
-//					turns("B");
-//				} else if (back[0][2] == 'Y' && back[2][0] == 'Y') {
-//					turns("uiRBrbIrUR");
-//				}
+			}
+			
+			boolean whiteEdgesInPlace = front[0][1] == 'W' && front[1][0] == 'W' && front[1][2] == 'W' && front[2][1] == 'W'
+					&& left[1][2] == 'B' && right[1][0] == 'G' && down[0][1] == 'O' && up[2][1] == 'R';
+
+			if (!whiteEdgesInPlace) {
+				System.out.println("WHITE EDGES TURNED OUT OF PLACE");
+				System.exit(0);
+			}
+			
+			boolean whiteCornersInPlace = front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W'
+					&& front[2][2] == 'W' && left[0][2] == 'B' && left[2][2] == 'B' && right[2][0] == 'G'
+					&& right[0][0] == 'G' && up[2][0] == 'R' && up[2][2] == 'R' && down[0][0] == 'O' && down[0][2] == 'O';
+
+			if (!whiteCornersInPlace) {
+				System.out.println("WHITE CORNERS TURNED OUT OF PLACE");
+				System.exit(0);
 			}
 			
 			yellowSideSolved = back[0][0] == 'Y' && back[0][1] == 'Y' && back[0][2] == 'Y'
@@ -692,11 +693,10 @@ public class RubiksCube {
 		}
 	}
 	
-	int count = 0;
-	
 	// fifth step: solve the last layer
 	void lastLayer() {
 		while (!solved()) {
+			System.out.println("SOLVING FOR THE LAST LAYER");
 			boolean leftAlternate = left[0][0] == left[2][0] && left[0][0] != left[1][0];
 			boolean rightAlternate = right[0][2] == right[2][2] && right[0][2] != right[1][2];
 			boolean upAlternate = up[0][0] == up[0][2] && up[0][0] != up[0][1];
@@ -714,20 +714,20 @@ public class RubiksCube {
 			boolean allUniform = leftUniform && rightUniform && upUniform && downUniform;
 			
 			if (rightAlternate && !upAlternate && !leftAlternate && !downAlternate && noUniform) {
-				turns("BB");
-			} else if (upAlternate && !leftAlternate && !downAlternate && !rightAlternate && noUniform) {
-				turns("B");
-			} else if (downAlternate && !rightAlternate && !upAlternate && !leftAlternate && noUniform) {
 				turns("b");
+			} else if (upAlternate && !leftAlternate && !downAlternate && !rightAlternate && noUniform) {
+				turns("BB");
+			} else if (downAlternate && !rightAlternate && !upAlternate && !leftAlternate && noUniform) {
+				turns("rUrDDRurDDRR");
 			} else if (leftAlternate && !downAlternate && !rightAlternate && !upAlternate && noUniform) {
-				turns("RBrbrURRbrbRBrb");
+				turns("B");
 			} else if (noUniform && noAlternate) {
-				turns("URbrbRBruRBrbrURu");
+				turns("rUrDDRurDDRR");
 			} else if (downUniform && rightAlternate && upAlternate && leftAlternate) {
 				if (up[0][1] == left[0][0]) {
-					turns("RRBRBrbrbrBr");
+					turns("UUBLrUUlRBUU");
 				} else {
-					turns("RRBRBrbrbrBr");
+					turns("UUbLrUUlRbUU");
 				}
 			} else if (rightUniform && upAlternate && leftAlternate && downAlternate) {
 				turns("b");
@@ -736,7 +736,7 @@ public class RubiksCube {
 			} else if (leftUniform && downAlternate && rightAlternate && upAlternate) {
 				turns("B");
 			} else if (allAlternate) {
-				turns("RbRBRBRbrbRR");
+				turns("UUbLrUUlRbUU");
 			} else if (allUniform) {
 				turns("B");
 			} else if (leftUniform && !rightUniform && !upUniform && !downUniform) {
@@ -746,7 +746,24 @@ public class RubiksCube {
 			} else if (upUniform && !downUniform && !leftUniform && !rightUniform) {
 				turns("BB");
 			} else if (downUniform && !upUniform && !leftUniform && !rightUniform) {
-				turns("RbRBRBRbrbRR");
+				turns("rUrDDRurDDRR");
+			}
+			
+			boolean whiteEdgesInPlace = front[0][1] == 'W' && front[1][0] == 'W' && front[1][2] == 'W' && front[2][1] == 'W'
+					&& left[1][2] == 'B' && right[1][0] == 'G' && down[0][1] == 'O' && up[2][1] == 'R';
+
+			if (!whiteEdgesInPlace) {
+				System.out.println("WHITE EDGES TURNED OUT OF PLACE");
+				System.exit(0);
+			}
+			
+			boolean whiteCornersInPlace = front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W'
+					&& front[2][2] == 'W' && left[0][2] == 'B' && left[2][2] == 'B' && right[2][0] == 'G'
+					&& right[0][0] == 'G' && up[2][0] == 'R' && up[2][2] == 'R' && down[0][0] == 'O' && down[0][2] == 'O';
+
+			if (!whiteCornersInPlace) {
+				System.out.println("WHITE CORNERS TURNED OUT OF PLACE");
+				System.exit(0);
 			}
 		}
 	}
@@ -755,7 +772,7 @@ public class RubiksCube {
 		whiteEdges();
 		whiteCorners();
 		sideEdges();
-		yellowSide();
+//		yellowSide();
 //		lastLayer();
 	}
 
