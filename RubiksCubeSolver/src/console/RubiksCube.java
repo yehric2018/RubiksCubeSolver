@@ -24,18 +24,17 @@ public class RubiksCube {
 	char[][] back;
 
 	// each of the twelve moves that can happen for any given cube
-	String[] moves = { "U", "D", "R", "L", "F", "B", "u", "d", "r", "l", "f", "b"};
-	
+	String[] moves = { "U", "D", "R", "L", "F", "B", "u", "d", "r", "l", "f", "b" };
+
 	boolean[] checked = new boolean[12];
-	String[] solutions = {"", "", "", "", "", "", "", "", "", "", "", ""};
-	
-	
+	String[] solutions = { "", "", "", "", "", "", "", "", "", "", "", "" };
+
 	// scramble the cube
 	void scramble() {
 		// randomly select an algorithm to run 20 times
 		for (int i = 0; i < 20; i++) {
 			int rand = (int) (Math.random() * 12);
-//			System.out.println(moves[rand]);
+			// System.out.println(moves[rand]);
 			turn(moves[rand]);
 		}
 	}
@@ -211,8 +210,8 @@ public class RubiksCube {
 			front[1][1] = copy.left[1][1];
 			front[1][2] = copy.left[1][2];
 			right[1][0] = copy.front[1][0];
-			right[1][1] = copy.right[1][1];
-			right[1][2] = copy.right[1][2];
+			right[1][1] = copy.front[1][1];
+			right[1][2] = copy.front[1][2];
 			back[1][0] = copy.right[1][0];
 			back[1][1] = copy.right[1][1];
 			back[1][2] = copy.right[1][2];
@@ -340,6 +339,7 @@ public class RubiksCube {
 				&& left[1][2] == 'B' && right[1][0] == 'G' && down[0][1] == 'O' && up[2][1] == 'R';
 
 		while (!whiteEdgesInPlace) {
+			System.out.println("SOLVING WHITE EDGES NOW");
 			if (back[1][0] == 'W') {
 				turns("B");
 			} else if (back[1][2] == 'W') {
@@ -413,6 +413,7 @@ public class RubiksCube {
 				&& right[0][0] == 'G' && up[2][0] == 'R' && up[2][2] == 'R' && down[0][0] == 'O' && down[0][2] == 'O';
 
 		while (!whiteCornersInPlace) {
+			System.out.println("SOLVING WHITE CORNERS NOW");
 			if (back[0][0] == 'W') {
 				turns("B");
 			} else if (back[2][0] == 'W') {
@@ -457,7 +458,7 @@ public class RubiksCube {
 				turns("fUBubf");
 			}
 
-//			System.out.println("checkpoint");
+			// System.out.println("checkpoint");
 			// get the white corners into these three positions: back[0][2],
 			// up[0][0], left[0][0]
 			if (up[0][0] == 'W') {
@@ -498,14 +499,15 @@ public class RubiksCube {
 		}
 	}
 
-	// third step: solve the edges for each side face
+	// third step: solve the edges for each side
 	void sideEdges() {
 		boolean sideEdgesInPlace = up[1][0] == 'R' && up[1][2] == 'R' && right[0][1] == 'G' && right[2][1] == 'G'
 				&& down[1][0] == 'O' && down[1][2] == 'O' && left[0][1] == 'B' && left[2][1] == 'B'
 				&& front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W' && front[2][2] == 'W';
 
 		while (!sideEdgesInPlace) {
-//			System.out.println("START LOOP");
+			System.out.println("SOLVING SIDE EDGES NOW");
+			// System.out.println("START LOOP");
 			if (back[1][0] != 'W' && right[1][2] != 'W' && back[1][0] != 'Y' && right[1][2] != 'Y') {
 				turns("B");
 			} else if (back[1][2] != 'W' && left[1][0] != 'W' && back[1][2] != 'Y' && left[1][0] != 'Y') {
@@ -521,7 +523,7 @@ public class RubiksCube {
 			} else if ((down[1][2] != 'O' || right[1][0] != 'G') && (down[1][2] != 'Y' && right[1][0] != 'Y')) {
 				turns("rbRBDBd");
 			} else {
-//				System.out.println("A SHIFT WAS NOT MADE");
+				// System.out.println("A SHIFT WAS NOT MADE");
 			}
 
 			if (back[0][1] == 'O') {
@@ -555,111 +557,206 @@ public class RubiksCube {
 					&& front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W' && front[2][2] == 'W';
 		}
 	}
-
+	
 	// fourth step: solve the yellow side
 	void yellowSide() {
-		// search up all possible combinations for the last layer orientation
-		boolean yellowSideSolved = back[0][0] == 'Y' && back[0][1] == 'Y' && back[0][2] == 'Y' && back[1][0] == 'Y'
-				&& back[1][1] == 'Y' && back[1][2] == 'Y' && back[2][0] == 'Y' && back[2][1] == 'Y'
-				&& back[2][2] == 'Y';
-
+		boolean yellowSideSolved = back[0][0] == 'Y' && back[0][1] == 'Y' && back[0][2] == 'Y'
+				&& back[1][0] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y'
+				&& back[2][0] == 'Y' && back[2][1] == 'Y' && back[2][2] == 'Y';
+		
 		while (!yellowSideSolved) {
-			System.out.println("SOLVING THE YELLOW SIDE NOW");
-			if (back[0][0] != 'Y' && back[0][1] == 'Y' && back[0][2] == 'Y'
-					&& back[1][0] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y'
-					&& back[2][0] == 'Y' && back[2][1] == 'Y' && back[2][2] == 'Y') {
-				if (up[0][2] == 'Y') {
-					turns("RBrBRBBr");
-				} else if (left[2][0] == 'Y') {
-					turns("dbDbdBBD");
-				}
-			} else if (back[0][0] == 'Y' && back[0][1] == 'Y' && back[0][2] != 'Y'
-					&& back[1][0] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y'
-					&& back[2][0] != 'Y' && back[2][1] == 'Y' && back[2][2] != 'Y') {
-				turns("B");
-			} else if (back[0][0] != 'Y' && back[0][1] == 'Y' && back[0][2] != 'Y'
-					&& back[1][0] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y'
-					&& back[2][0] != 'Y' && back[2][1] == 'Y' && back[2][2] == 'Y') {
-				turns("b");
-			} else if (back[0][0] != 'Y' && back[0][1] == 'Y' && back[0][2] != 'Y'
-					&& back[1][0] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y'
-					&& back[2][0] == 'Y' && back[2][1] == 'Y' && back[2][2] != 'Y') {
-				turns("BB");
-			} else if (back[0][1] != 'Y' && back[1][0] == 'Y' &&
-					back[1][1] == 'Y' && back[1][2] == 'Y' && back[2][1] != 'Y') {
+			if (back[1][0] == 'Y' && back[1][2] == 'Y' && back[0][1] != 'Y' && back[2][1] != 'Y') {
+				// LINE
 				turns("URBrbu");
-			} else if (back[0][1] == 'Y' && back[1][0] != 'Y'
-					&& back[1][1] == 'Y' && back[1][2] != 'Y'
-					&& back[2][1] == 'Y') {
+			} else if (back[1][0] != 'Y' && back[1][2] != 'Y' && back[0][1] == 'Y' && back[2][1] == 'Y') {
 				turns("B");
-			} else if (back[0][0] == 'Y' && back[0][1] == 'Y' && back[0][2] != 'Y'
-					&& back[1][0] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y'
-					&& back[2][0] != 'Y' && back[2][1] == 'Y' && back[2][2] == 'Y') {
-				if (up[0][0] != 'Y') {
-					turns("BB");
-				}
-				turns("lbLblBBL");
-			} else if (back[0][0] != 'Y' && back[0][1] == 'Y' && back[0][2] == 'Y'
-					&& back[1][0] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y'
-					&& back[2][0] == 'Y' && back[2][1] == 'Y' && back[2][2] != 'Y') {
+			} else if (back[1][0] == 'Y' && back[1][2] != 'Y' && back[0][1] == 'Y' && back[2][1] != 'Y') {
+				// L
+				turns("UmRBrbuM");
+			} else if (back[1][0] == 'Y' && back[1][2] != 'Y' && back[0][1] != 'Y' && back[2][1] == 'Y') {
 				turns("B");
-			} else if (back[0][0] == 'Y' && back[0][1] == 'Y' && back[0][2] == 'Y'
-					&& back[1][0] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y'
-					&& back[2][0] != 'Y' && back[2][1] == 'Y' && back[2][2] != 'Y') {
-				if (down[2][0] == 'Y' && down[2][2] == 'Y') {
-					turns("rBlBRbLBBrBR");
-				} else {
-					turns("drURDruR");
-				}
-			} else if (back[0][0] == 'Y' && back[0][1] == 'Y' && back[0][2] != 'Y'
-					&& back[1][0] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y'
-					&& back[2][0] == 'Y' && back[2][1] == 'Y' && back[2][2] != 'Y') {
-				turns("B");
-			} else if (back[0][0] != 'Y' && back[0][1] == 'Y' && back[0][2] != 'Y'
-					&& back[1][0] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y'
-					&& back[2][0] == 'Y' && back[2][1] == 'Y' && back[2][2] == 'Y') {
+			} else if (back[1][0] != 'Y' && back[1][2] == 'Y' && back[0][1] != 'Y' && back[2][1] == 'Y') {
 				turns("BB");
-			} else if (back[0][0] != 'Y' && back[0][1] == 'Y' && back[0][2] != 'Y'
-					&& back[1][0] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y'
-					&& back[2][0] == 'Y' && back[2][1] == 'Y' && back[2][2] == 'Y') {
+			} else if (back[1][0] != 'Y' && back[1][2] == 'Y' && back[0][1] == 'Y' && back[2][1] != 'Y') {
 				turns("b");
-			} else if (back[0][0] != 'Y' && back[0][1] == 'Y' && back[0][2] != 'Y'
-					&& back[1][0] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y'
-					&& back[2][0] != 'Y' && back[2][1] == 'Y' && back[2][2] != 'Y') {
-				if (up[0][0] == 'Y' && up[0][2] == 'Y') {
-					turns("RBrBRBBr");
-				} else if (left[0][0] == 'Y' && left[2][0] == 'Y') {
-					turns("b");
-				} else if (down[2][0] == 'Y' && left[2][2] == 'Y') {
-					turns("BB");
-				} else if (right[0][2] == 'Y' && right[2][2] == 'Y') {
+			} else if (back[1][0] != 'Y' && back[1][2] != 'Y' && back[0][1] != 'Y' && back[2][1] != 'Y') {
+				// DOT
+				turns("URBrbuUmRBrbuM");
+			} else if (back[1][0] == 'Y' && back[1][2] == 'Y' && back[0][1] == 'Y' && back[2][1] == 'Y') {
+				// CROSS
+				if (back[0][0] == 'Y' && back[0][2] != 'Y' && back[2][0] != 'Y' && back[2][2] != 'Y') {
 					turns("B");
-				} else {
-					turns("RBrBRBBr");
+				} else if (back[0][0] != 'Y' && back[0][2] == 'Y' && back[2][0] != 'Y' && back[2][2] != 'Y') {
+					if (up[0][2] == 'Y') {
+						turns("RBrBRBBr");
+					} else {
+						turns("B");
+					}
+				} else if (back[0][0] != 'Y' && back[0][2] != 'Y' && back[2][0] == 'Y' && back[2][2] != 'Y') {
+					turns("B");
+				} else if (back[0][0] != 'Y' && back[0][2] != 'Y' && back[2][0] != 'Y' && back[2][2] == 'Y') {
+					if (up[0][0] == 'Y') {
+						turns("rbRbrBBR");
+					} else {
+						turns("b");
+					}
+				} else if (up[0][0] == 'Y' && up[0][2] == 'Y' && down[2][0] == 'Y' && down[2][2] == 'Y') {
+					turns("URBrbRBrbRBrbu");
+				} else if (left[0][0] == 'Y' && left[2][0] == 'Y' && right[0][2] == 'Y' && right[2][2] == 'Y') {
+					turns("B");
+				} else if (up[0][0] == 'Y' && up[0][2] == 'Y' && back[0][0] != 'Y' && back[0][2] != 'Y' && back[2][0] != 'Y' && back[2][2] != 'Y') {
+					turns("B");
+				} else if (down[2][0] == 'Y' && down[2][2] == 'Y' && back[0][0] != 'Y' && back[0][2] != 'Y' && back[2][0] != 'Y' && back[2][2] != 'Y') {
+					turns("b");
+				} else if (right[0][2] == 'Y' && right[2][2] == 'Y' && back[0][0] != 'Y' && back[0][2] != 'Y' && back[2][0] != 'Y' && back[2][2] != 'Y') {
+					turns("BB");
+				} else if (left[0][0] == 'Y' && left[2][0] == 'Y' && back[0][0] != 'Y' && back[0][2] != 'Y' && back[2][0] != 'Y' && back[2][2] != 'Y') {
+					turns("RBBRRbRRbRRBBR");
+				} else if (back[0][0] != 'Y' && back[0][2] == 'Y' && back[2][0] != 'Y' && back[2][2] == 'Y') {
+					// left side is empty
+					turns("BB");
+				} else if (back[0][0] == 'Y' && back[0][2] != 'Y' && back[2][0] == 'Y' && back[2][2] != 'Y') {
+					// right side is empty
+					turns("b");
+				} else if (back[0][0] != 'Y' && back[0][2] != 'Y' && back[2][0] == 'Y' && back[2][2] == 'Y') {
+					// up side is empty
+					if (up[0][0] == 'Y' && up[0][2] == 'Y') {
+						turns("RRFrBBRfrBBr");
+					} else {
+						turns("BiRBrbIrURu");
+					}
+				} else if (back[0][0] == 'Y' && back[0][2] == 'Y' && back[2][0] != 'Y' && back[2][2] != 'Y') {
+					// down side is empty
+					turns("b");
+				} else if (back[0][0] == 'Y' && back[0][2] != 'Y' && back[2][2] == 'Y' && back[2][0] != 'Y') {
+					turns("uiRBrbIrUR");
+				} else if (back[0][0] != 'Y' && back[0][2] == 'Y' && back[2][2] != 'Y' && back[2][0] == 'Y') {
+					turns("B");
 				}
-			} else if (back[0][1] == 'Y' && back[1][0] == 'Y' && back[1][1] == 'Y') {
-				turns("RBrBRBBr");
-			} else if (back[0][1] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y') {
-				turns("b");
-			} else if (back[1][1] == 'Y' && back[1][2] == 'Y' && back[2][1] == 'Y') {
-				turns("BB");
-			} else if (back[1][0] == 'Y' && back[1][1] == 'Y' && back[2][1] == 'Y') {
-				turns("B");
-			} else {
-				turns("URBrbu");
+				
+				
+				
+				
+//				if (back[0][0] == 'Y' && back[0][2] == 'Y') {
+//					if (up[0][0] == 'Y' && up[0][2] == 'Y') {
+//						turns("RRFrBBRfrBBr");
+//					} else {
+//						turns("BiRBrbIrURu");
+//					}
+//				} else if (back[0][0] == 'Y') {
+//					turns("B");
+//				} else if (back[0][2] == 'Y') {
+//					if (up[0][2] == 'Y') {
+//						turns("RBrBRBBr");
+//					} else {
+//						turns("BBrbRbrBBR");
+//					}
+//				} else if (back[2][0] == 'Y') {
+//					turns("BB");
+//				} else if (back[2][2] == 'Y') {
+//					turns("b");
+//				} else if (up[0][0] == 'Y' && up[0][2] == 'Y' && down[2][0] == 'Y' && down[2][2] == 'Y') {
+//					turns("URBrbRBrbRBrbu");
+//				} else if (left[0][0] == 'Y' && left[2][0] == 'Y' && right[0][2] == 'Y' && right[2][2] == 'Y') {
+//					turns("B");
+//				} else if (up[0][0] == 'Y' && up[0][2] == 'Y' && down[2][0] != 'Y' && down[2][2] != 'Y') {
+//					turns("B");
+//				} else if (up[0][0] != 'Y' && up[0][2] != 'Y' && down[2][0] == 'Y' && down[2][2] == 'Y') {
+//					turns("b");
+//				} else if (left[0][0] == 'Y' && left[2][0] == 'Y' && right[0][2] == 'Y' && right[2][2] == 'Y') {
+//					turns("RBBRRbRRbRRBBR");
+//				} else if (left[0][0] == 'Y' && left[2][0] == 'Y' && right[0][2] == 'Y' && right[2][2] == 'Y') {
+//					turns("BB");
+//				} else if (back[0][0] == 'Y' && back[0][2] == 'Y') {
+//					if (up[0][0] == 'Y' && up[0][2] == 'Y') {
+//						turns("RRFrBBRfrBBr");
+//					} else {
+//						turns("BiRBrbIrURu");
+//					}
+//				} else if (back[0][0] == 'Y' && back[2][0] == 'Y') {
+//					turns("B");
+//				} else if (back[2][0] == 'Y' && back[2][2] == 'Y') {
+//					turns("BB");
+//				} else if (back[2][2] == 'Y' && back[0][2] == 'Y') {
+//					turns("b");
+//				} else if (back[0][0] == 'Y' && back[2][2] == 'Y') {
+//					turns("B");
+//				} else if (back[0][2] == 'Y' && back[2][0] == 'Y') {
+//					turns("uiRBrbIrUR");
+//				}
 			}
 			
-			yellowSideSolved = back[0][0] == 'Y' && back[0][1] == 'Y' && back[0][2] == 'Y' && back[1][0] == 'Y'
-					&& back[1][1] == 'Y' && back[1][2] == 'Y' && back[2][0] == 'Y' && back[2][1] == 'Y'
-					&& back[2][2] == 'Y';
+			yellowSideSolved = back[0][0] == 'Y' && back[0][1] == 'Y' && back[0][2] == 'Y'
+					&& back[1][0] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y'
+					&& back[2][0] == 'Y' && back[2][1] == 'Y' && back[2][2] == 'Y';
 		}
 	}
 	
-	// solve the cube using the Fridrich method
-	 void solve() {
-		 whiteEdges();
-		 whiteCorners();
-		 sideEdges();
-//		 yellowSide();
-	 }
+	int count = 0;
+	
+	// fifth step: solve the last layer
+	void lastLayer() {
+		while (!solved()) {
+			boolean leftAlternate = left[0][0] == left[2][0] && left[0][0] != left[1][0];
+			boolean rightAlternate = right[0][2] == right[2][2] && right[0][2] != right[1][2];
+			boolean upAlternate = up[0][0] == up[0][2] && up[0][0] != up[0][1];
+			boolean downAlternate = down[2][0] == down[2][2] && down[2][0] != down[2][1];
+			
+			boolean leftUniform = left[0][0] == left[2][0] && left[0][0] == left[1][0];
+			boolean rightUniform = right[0][2] == right[2][2] && right[0][2] == right[1][2];
+			boolean upUniform = up[0][0] == up[0][2] && up[0][0] == up[0][1];
+			boolean downUniform = down[2][0] == down[2][2] && down[2][0] == down[2][1];
+			
+			boolean noUniform = !leftUniform && !rightUniform && !upUniform && !downUniform;
+			boolean noAlternate = !leftAlternate && !rightAlternate && !upAlternate && !downAlternate;
+			
+			boolean allAlternate = leftAlternate && rightAlternate && upAlternate && downAlternate;
+			boolean allUniform = leftUniform && rightUniform && upUniform && downUniform;
+			
+			if (rightAlternate && !upAlternate && !leftAlternate && !downAlternate && noUniform) {
+				turns("BB");
+			} else if (upAlternate && !leftAlternate && !downAlternate && !rightAlternate && noUniform) {
+				turns("B");
+			} else if (downAlternate && !rightAlternate && !upAlternate && !leftAlternate && noUniform) {
+				turns("b");
+			} else if (leftAlternate && !downAlternate && !rightAlternate && !upAlternate && noUniform) {
+				turns("RBrbrURRbrbRBrb");
+			} else if (noUniform && noAlternate) {
+				turns("URbrbRBruRBrbrURu");
+			} else if (downUniform && rightAlternate && upAlternate && leftAlternate) {
+				if (up[0][1] == left[0][0]) {
+					turns("RRBRBrbrbrBr");
+				} else {
+					turns("RRBRBrbrbrBr");
+				}
+			} else if (rightUniform && upAlternate && leftAlternate && downAlternate) {
+				turns("b");
+			} else if (upUniform && leftAlternate && downAlternate && rightAlternate) {
+				turns("BB");
+			} else if (leftUniform && downAlternate && rightAlternate && upAlternate) {
+				turns("B");
+			} else if (allAlternate) {
+				turns("RbRBRBRbrbRR");
+			} else if (allUniform) {
+				turns("B");
+			} else if (leftUniform && !rightUniform && !upUniform && !downUniform) {
+				turns("B");
+			} else if (rightUniform && !leftUniform && !upUniform && !downUniform) {
+				turns("b");
+			} else if (upUniform && !downUniform && !leftUniform && !rightUniform) {
+				turns("BB");
+			} else if (downUniform && !upUniform && !leftUniform && !rightUniform) {
+				turns("RbRBRBRbrbRR");
+			}
+		}
+	}
+
+	void solve() {
+		whiteEdges();
+		whiteCorners();
+		sideEdges();
+		yellowSide();
+//		lastLayer();
+	}
+
 }
