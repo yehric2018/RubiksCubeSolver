@@ -363,7 +363,7 @@ public class RubiksCube {
 			} else if (right[1][2] == 'W') {
 				turns("ruBUbR");
 			} else if (right[2][1] == 'W') {
-				turns("RRuBUbRR");
+				turns("DBd");
 			} else if (front[0][1] == 'W' && up[2][1] != 'R') {
 				turns("UU");
 			} else if (front[1][0] == 'W' && left[1][2] != 'B') {
@@ -772,8 +772,9 @@ public class RubiksCube {
 		whiteEdges();
 		whiteCorners();
 		sideEdges();
-//		yellowSide();
-//		lastLayer();
+		yellowSide();
+		lastLayer();
+		System.out.println("CUBE IS SOLVED");
 	}
 
 }
