@@ -1,7 +1,5 @@
 package console;
 
-import java.util.ArrayList;
-
 public class RubiksCube {
 
 	public RubiksCube(char[][] front, char[][] back, char[][] left, char[][] right, char[][] up, char[][] down) {
@@ -28,8 +26,16 @@ public class RubiksCube {
 	// each of the twelve moves that can happen for any given cube
 	String[] moves = { "U", "D", "R", "L", "F", "B", "u", "d", "r", "l", "f", "b" };
 
-	boolean[] checked = new boolean[12];
-	String[] solutions = { "", "", "", "", "", "", "", "", "", "", "", "" };
+	// check if a given cube configuration is valid
+	boolean validityChecker() {
+		try {
+			solve();
+		} catch(StackOverflowError e) {
+			System.out.println("Unsolvable cube");
+			return false;
+		}
+		return true;
+	}
 
 	// scramble the cube
 	void scramble() {
