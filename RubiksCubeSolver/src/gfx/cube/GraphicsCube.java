@@ -574,10 +574,10 @@ public class GraphicsCube {
 				boolean whiteEdgesInPlace = front[0][1] == 'W' && front[1][0] == 'W' && front[1][2] == 'W' && front[2][1] == 'W'
 						&& left[1][2] == 'B' && right[1][0] == 'G' && down[0][1] == 'O' && up[2][1] == 'R';
 
-				if (!whiteEdgesInPlace) {
-					System.out.println("WHITE EDGES TURNED OUT OF PLACE");
-					System.exit(0);
-				}
+//				if (!whiteEdgesInPlace) {
+//					System.out.println("WHITE EDGES TURNED OUT OF PLACE");
+//					System.exit(0);
+//				}
 
 				System.out.println("WHITE CORNERS PART 2");
 				if (up[0][0] == 'W') {
@@ -615,10 +615,10 @@ public class GraphicsCube {
 				whiteEdgesInPlace = front[0][1] == 'W' && front[1][0] == 'W' && front[1][2] == 'W' && front[2][1] == 'W'
 						&& left[1][2] == 'B' && right[1][0] == 'G' && down[0][1] == 'O' && up[2][1] == 'R';
 
-				if (!whiteEdgesInPlace) {
-					System.out.println("WHITE EDGES TURNED OUT OF PLACE");
-					System.exit(0);
-				}
+//				if (!whiteEdgesInPlace) {
+//					System.out.println("WHITE EDGES TURNED OUT OF PLACE");
+//					System.exit(0);
+//				}
 				
 				whiteCornersInPlace = front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W' && front[2][2] == 'W'
 						&& left[0][2] == 'B' && left[2][2] == 'B' && right[2][0] == 'G' && right[0][0] == 'G'
@@ -682,19 +682,19 @@ public class GraphicsCube {
 				boolean whiteEdgesInPlace = front[0][1] == 'W' && front[1][0] == 'W' && front[1][2] == 'W' && front[2][1] == 'W'
 						&& left[1][2] == 'B' && right[1][0] == 'G' && down[0][1] == 'O' && up[2][1] == 'R';
 
-				if (!whiteEdgesInPlace) {
-					System.out.println("WHITE EDGES TURNED OUT OF PLACE");
-					System.exit(0);
-				}
+//				if (!whiteEdgesInPlace) {
+//					System.out.println("WHITE EDGES TURNED OUT OF PLACE");
+//					System.exit(0);
+//				}
 				
 				boolean whiteCornersInPlace = front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W'
 						&& front[2][2] == 'W' && left[0][2] == 'B' && left[2][2] == 'B' && right[2][0] == 'G'
 						&& right[0][0] == 'G' && up[2][0] == 'R' && up[2][2] == 'R' && down[0][0] == 'O' && down[0][2] == 'O';
 
-				if (!whiteCornersInPlace) {
-					System.out.println("WHITE CORNERS TURNED OUT OF PLACE");
-					System.exit(0);
-				}
+//				if (!whiteCornersInPlace) {
+//					System.out.println("WHITE CORNERS TURNED OUT OF PLACE");
+//					System.exit(0);
+//				}
 				
 				sideEdgesInPlace = up[1][0] == 'R' && up[1][2] == 'R' && right[0][1] == 'G' && right[2][1] == 'G'
 						&& down[1][0] == 'O' && down[1][2] == 'O' && left[0][1] == 'B' && left[2][1] == 'B'
@@ -783,19 +783,19 @@ public class GraphicsCube {
 				boolean whiteEdgesInPlace = front[0][1] == 'W' && front[1][0] == 'W' && front[1][2] == 'W' && front[2][1] == 'W'
 						&& left[1][2] == 'B' && right[1][0] == 'G' && down[0][1] == 'O' && up[2][1] == 'R';
 
-				if (!whiteEdgesInPlace) {
-					System.out.println("WHITE EDGES TURNED OUT OF PLACE");
-					System.exit(0);
-				}
+//				if (!whiteEdgesInPlace) {
+//					System.out.println("WHITE EDGES TURNED OUT OF PLACE");
+//					System.exit(0);
+//				}
 				
 				boolean whiteCornersInPlace = front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W'
 						&& front[2][2] == 'W' && left[0][2] == 'B' && left[2][2] == 'B' && right[2][0] == 'G'
 						&& right[0][0] == 'G' && up[2][0] == 'R' && up[2][2] == 'R' && down[0][0] == 'O' && down[0][2] == 'O';
 
-				if (!whiteCornersInPlace) {
-					System.out.println("WHITE CORNERS TURNED OUT OF PLACE");
-					System.exit(0);
-				}
+//				if (!whiteCornersInPlace) {
+//					System.out.println("WHITE CORNERS TURNED OUT OF PLACE");
+//					System.exit(0);
+//				}
 				
 				yellowSideSolved = back[0][0] == 'Y' && back[0][1] == 'Y' && back[0][2] == 'Y'
 						&& back[1][0] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y'
@@ -862,19 +862,19 @@ public class GraphicsCube {
 				boolean whiteEdgesInPlace = front[0][1] == 'W' && front[1][0] == 'W' && front[1][2] == 'W' && front[2][1] == 'W'
 						&& left[1][2] == 'B' && right[1][0] == 'G' && down[0][1] == 'O' && up[2][1] == 'R';
 
-				if (!whiteEdgesInPlace) {
-					System.out.println("WHITE EDGES TURNED OUT OF PLACE");
-					System.exit(0);
-				}
+//				if (!whiteEdgesInPlace) {
+//					System.out.println("WHITE EDGES TURNED OUT OF PLACE");
+//					System.exit(0);
+//				}
 				
 				boolean whiteCornersInPlace = front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W'
 						&& front[2][2] == 'W' && left[0][2] == 'B' && left[2][2] == 'B' && right[2][0] == 'G'
 						&& right[0][0] == 'G' && up[2][0] == 'R' && up[2][2] == 'R' && down[0][0] == 'O' && down[0][2] == 'O';
 
-				if (!whiteCornersInPlace) {
-					System.out.println("WHITE CORNERS TURNED OUT OF PLACE");
-					System.exit(0);
-				}
+//				if (!whiteCornersInPlace) {
+//					System.out.println("WHITE CORNERS TURNED OUT OF PLACE");
+//					System.exit(0);
+//				}
 			}
 		}
 
