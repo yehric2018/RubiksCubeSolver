@@ -4,7 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import gfx.Handler;
-import gfx.cube.RubiksCube;
+import gfx.cube.GraphicsCube;
 
 public class KeyManager implements KeyListener {
 	
@@ -12,7 +12,7 @@ public class KeyManager implements KeyListener {
 	private boolean shift;
 	public boolean up, down, left, right, rotateRight, rotateLeft;
 	
-	private RubiksCube cube;
+	private GraphicsCube cube;
 
 	public KeyManager(Handler handler) {
 		keys = new boolean[256];
@@ -34,8 +34,6 @@ public class KeyManager implements KeyListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 		keys[e.getKeyCode()] = false;
-		if (e.getKeyCode() == KeyEvent.VK_S)
-			cube.scramble();
 		if (shift) {
 			if (e.getKeyCode() == KeyEvent.VK_F)
 				cube.turn("f");
@@ -49,6 +47,8 @@ public class KeyManager implements KeyListener {
 				cube.turn("r");
 			else if (e.getKeyCode() == KeyEvent.VK_L)
 				cube.turn("l");
+			else if (e.getKeyCode() == KeyEvent.VK_S)
+				cube.solve();
 		} else {
 			if (e.getKeyCode() == KeyEvent.VK_F)
 				cube.turn("F");
@@ -62,6 +62,8 @@ public class KeyManager implements KeyListener {
 				cube.turn("R");
 			else if (e.getKeyCode() == KeyEvent.VK_L)
 				cube.turn("L");
+			else if (e.getKeyCode() == KeyEvent.VK_S)
+				cube.scramble();
 		}
 		
 		if (e.getKeyCode() == KeyEvent.VK_UP)

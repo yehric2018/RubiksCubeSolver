@@ -1,6 +1,6 @@
 package gfx;
 
-import gfx.cube.RubiksCube;
+import gfx.cube.GraphicsCube;
 import gfx.input.KeyManager;
 
 public class Handler {
@@ -18,7 +18,7 @@ public class Handler {
 		return program.getKeyManager();
 	}
 	
-	public RubiksCube getCube() {
+	public GraphicsCube getCube() {
 		return program.getCube();
 	}
 }

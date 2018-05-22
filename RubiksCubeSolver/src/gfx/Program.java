@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 
-import gfx.cube.RubiksCube;
+import gfx.cube.GraphicsCube;
 import gfx.input.KeyManager;
 
 public class Program implements Runnable {
@@ -20,7 +20,7 @@ public class Program implements Runnable {
 	private Thread thread;
 	private boolean running = false;
 	
-	private RubiksCube cube;
+	private GraphicsCube cube;
 	
 	private KeyManager keyManager;
 	
@@ -35,7 +35,7 @@ public class Program implements Runnable {
 		
 		this.handler = new Handler(this);
 		
-		this.cube = new RubiksCube(handler);
+		this.cube = new GraphicsCube(handler);
 		
 		keyManager = new KeyManager(handler);
 		display.getFrame().addKeyListener(keyManager);
@@ -110,7 +110,7 @@ public class Program implements Runnable {
 	public KeyManager getKeyManager() {
 		return keyManager;
 	}
-	public RubiksCube getCube() {
+	public GraphicsCube getCube() {
 		return cube;
 	}
 }
