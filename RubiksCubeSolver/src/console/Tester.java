@@ -1,7 +1,5 @@
 package console;
 
-import java.util.Scanner;
-
 import gfx.Program;
 
 public class Tester {
