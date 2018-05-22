@@ -26,17 +26,6 @@ public class RubiksCube {
 	// each of the twelve moves that can happen for any given cube
 	String[] moves = { "U", "D", "R", "L", "F", "B", "u", "d", "r", "l", "f", "b" };
 
-	// check if a given cube configuration is valid
-	boolean validityChecker() {
-		try {
-			solve();
-		} catch(StackOverflowError e) {
-			System.out.println("Unsolvable cube");
-			return false;
-		}
-		return true;
-	}
-
 	// scramble the cube
 	void scramble() {
 		// randomly select an algorithm to run 20 times
