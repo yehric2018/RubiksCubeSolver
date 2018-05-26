@@ -323,8 +323,8 @@ public class GraphicsCube {
 			front[1][1] = copy.left[1][1];
 			front[1][2] = copy.left[1][2];
 			right[1][0] = copy.front[1][0];
-			right[1][1] = copy.right[1][1];
-			right[1][2] = copy.right[1][2];
+			right[1][1] = copy.front[1][1];
+			right[1][2] = copy.front[1][2];
 			back[1][0] = copy.right[1][0];
 			back[1][1] = copy.right[1][1];
 			back[1][2] = copy.right[1][2];
@@ -445,447 +445,461 @@ public class GraphicsCube {
 		return oneSideSolved(up) && oneSideSolved(back) && oneSideSolved(front) && oneSideSolved(left)
 				&& oneSideSolved(right) && oneSideSolved(down);
 	}
-		// first step: gather the white edges
-		void whiteEdges() {
-			boolean whiteEdgesInPlace = front[0][1] == 'W' && front[1][0] == 'W' && front[1][2] == 'W' && front[2][1] == 'W'
+
+	// first step: gather the white edges
+	void whiteEdges() {
+		boolean whiteEdgesInPlace = front[0][1] == 'W' && front[1][0] == 'W' && front[1][2] == 'W' && front[2][1] == 'W'
+				&& left[1][2] == 'B' && right[1][0] == 'G' && down[0][1] == 'O' && up[2][1] == 'R';
+
+		while (!whiteEdgesInPlace) {
+			System.out.println("SOLVING WHITE EDGES NOW");
+			if (back[1][0] == 'W') {
+				turns("B");
+			} else if (back[1][2] == 'W') {
+				turns("b");
+			} else if (back[2][1] == 'W') {
+				turns("BB");
+			} else if (left[0][1] == 'W') {
+				turns("UbuB");
+			} else if (left[1][0] == 'W') {
+				turns("LUbuBl");
+			} else if (left[1][2] == 'W') {
+				turns("LLb");
+			} else if (left[2][1] == 'W') {
+				turns("lUBu");
+			} else if (right[0][1] == 'W') {
+				turns("uBUb");
+			} else if (right[1][0] == 'W') {
+				turns("RuBUb");
+			} else if (right[1][2] == 'W') {
+				turns("ruBUbR");
+			} else if (right[2][1] == 'W') {
+				turns("DBd");
+			} else if (front[0][1] == 'W' && up[2][1] != 'R') {
+				turns("UU");
+			} else if (front[1][0] == 'W' && left[1][2] != 'B') {
+				turns("FUUf");
+			} else if (front[1][2] == 'W' && right[1][0] != 'G') {
+				turns("fUUF");
+			} else if (front[2][1] == 'W' && down[0][1] != 'O') {
+				turns("FFUUFF");
+			} else if (up[0][1] == 'W') {
+				turns("BldLBB");
+			} else if (up[1][0] == 'W') {
+				turns("UBuldLBB");
+			} else if (up[1][2] == 'W') {
+				turns("uBUldLBB");
+			} else if (up[2][1] == 'W') {
+				turns("uuBldLBB");
+			} else if (down[0][1] == 'W') {
+				turns("DrBR");
+			} else if (down[1][0] == 'W') {
+				turns("DDrBRd");
+			} else if (down[1][2] == 'W') {
+				turns("dDrBRD");
+			} else if (down[2][1] == 'W') {
+				turns("ddDrBRDD");
+			}
+
+			System.out.println("WHITE EDGES PART 2");
+			if (back[0][1] == 'W') {
+				char adjacent = up[0][1];
+				if (adjacent == 'B') {
+					turns("BLL");
+				} else if (adjacent == 'R') {
+					turns("UU");
+				} else if (adjacent == 'G') {
+					turns("bRR");
+				} else {
+					turns("BBDD");
+				}
+			}
+
+			whiteEdgesInPlace = front[0][1] == 'W' && front[1][0] == 'W' && front[1][2] == 'W' && front[2][1] == 'W'
+					&& left[1][2] == 'B' && right[1][0] == 'G' && down[0][1] == 'O' && up[2][1] == 'R';
+		}
+	}
+
+	// second step: gather the white corners
+	void whiteCorners() {
+		boolean whiteCornersInPlace = front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W'
+				&& front[2][2] == 'W' && left[0][2] == 'B' && left[2][2] == 'B' && right[2][0] == 'G'
+				&& right[0][0] == 'G' && up[2][0] == 'R' && up[2][2] == 'R' && down[0][0] == 'O' && down[0][2] == 'O';
+
+		while (!whiteCornersInPlace) {
+			System.out.println("SOLVING WHITE CORNERS NOW");
+			if (back[0][0] == 'W') {
+				turns("B");
+			} else if (back[2][0] == 'W') {
+				turns("BB");
+			} else if (back[2][2] == 'W') {
+				turns("b");
+			} else if (up[0][2] == 'W') {
+				turns("B");
+			} else if (right[0][2] == 'W') {
+				turns("B");
+			} else if (right[2][2] == 'W') {
+				turns("BB");
+			} else if (down[2][2] == 'W') {
+				turns("BB");
+			} else if (down[2][0] == 'W') {
+				turns("b");
+			} else if (left[2][0] == 'W') {
+				turns("b");
+			} else if (up[2][0] == 'W') {
+				turns("UBub");
+			} else if (up[2][2] == 'W') {
+				turns("uBUB");
+			} else if (right[0][0] == 'W') {
+				turns("uBUB");
+			} else if (right[2][0] == 'W') {
+				turns("rBBR");
+			} else if (down[0][2] == 'W') {
+				turns("rBBR");
+			} else if (down[0][0] == 'W') {
+				turns("dbD");
+			} else if (left[2][2] == 'W') {
+				turns("dbD");
+			} else if (left[0][2] == 'W') {
+				turns("lbL");
+			} else if (front[0][0] == 'W' && up[2][0] != 'R') {
+				turns("UBub");
+			} else if (front[0][2] == 'W' && up[2][2] != 'R') {
+				turns("fUBubF");
+			} else if (front[2][2] == 'W' && down[0][2] != 'O') {
+				turns("FFUBubFF");
+			} else if (front[2][0] == 'W' && down[0][0] != 'O') {
+				turns("fUBubF");
+			}
+
+			boolean whiteEdgesInPlace = front[0][1] == 'W' && front[1][0] == 'W' && front[1][2] == 'W'
+					&& front[2][1] == 'W' && left[1][2] == 'B' && right[1][0] == 'G' && down[0][1] == 'O'
+					&& up[2][1] == 'R';
+
+			if (!whiteEdgesInPlace) {
+				System.out.println("WHITE EDGES TURNED OUT OF PLACE");
+				System.exit(0);
+			}
+
+			System.out.println("WHITE CORNERS PART 2");
+			if (up[0][0] == 'W') {
+				if (left[0][0] == 'O') {
+					turns("FUBuf");
+				} else if (left[0][0] == 'G') {
+					turns("FFUBuFF");
+				} else if (left[0][0] == 'R') {
+					turns("fUBuF");
+				} else if (left[0][0] == 'B') {
+					turns("UBu");
+				}
+			} else if (back[0][2] == 'W') {
+				if (up[0][0] == 'R') {
+					turns("fUBBubUBuF");
+				} else if (up[0][0] == 'B') {
+					turns("UBBubUBu");
+				} else if (up[0][0] == 'O') {
+					turns("FUBBubUBuf");
+				} else if (up[0][0] == 'G') {
+					turns("FFUBBubUBuFF");
+				}
+			} else if (left[0][0] == 'W') {
+				if (up[0][0] == 'G') {
+					turns("bubU");
+				} else if (up[0][0] == 'O') {
+					turns("BBrbR");
+				} else if (up[0][0] == 'B') {
+					turns("BdbD");
+				} else if (up[0][0] == 'R') {
+					turns("lbL");
+				}
+			}
+
+			whiteEdgesInPlace = front[0][1] == 'W' && front[1][0] == 'W' && front[1][2] == 'W' && front[2][1] == 'W'
 					&& left[1][2] == 'B' && right[1][0] == 'G' && down[0][1] == 'O' && up[2][1] == 'R';
 
-			while (!whiteEdgesInPlace) {
-				System.out.println("SOLVING WHITE EDGES NOW");
-				if (back[1][0] == 'W') {
-					turns("B");
-				} else if (back[1][2] == 'W') {
-					turns("b");
-				} else if (back[2][1] == 'W') {
-					turns("BB");
-				} else if (left[0][1] == 'W') {
-					turns("UbuB");
-				} else if (left[1][0] == 'W') {
-					turns("LUbuBl");
-				} else if (left[1][2] == 'W') {
-					turns("LLb");
-				} else if (left[2][1] == 'W') {
-					turns("Lbl");
-				} else if (right[0][1] == 'W') {
-					turns("uBUb");
-				} else if (right[1][0] == 'W') {
-					turns("RuBUb");
-				} else if (right[1][2] == 'W') {
-					turns("ruBUbR");
-				} else if (right[2][1] == 'W') {
-					turns("DBd");
-				} else if (front[0][1] == 'W' && up[2][1] != 'R') {
-					turns("UU");
-				} else if (front[1][0] == 'W' && left[1][2] != 'B') {
-					turns("FUUf");
-				} else if (front[1][2] == 'W' && right[1][0] != 'G') {
-					turns("fUUF");
-				} else if (front[2][1] == 'W' && down[0][1] != 'O') {
-					turns("FFUUFF");
-				} else if (up[0][1] == 'W') {
-					turns("BldLBB");
-				} else if (up[1][0] == 'W') {
-					turns("UBuldLBB");
-				} else if (up[1][2] == 'W') {
-					turns("uBUldLBB");
-				} else if (up[2][1] == 'W') {
-					turns("uuBldLBB");
-				} else if (down[0][1] == 'W') {
-					turns("DrBR");
-				} else if (down[1][0] == 'W') {
-					turns("DDrBRd");
-				} else if (down[1][2] == 'W') {
-					turns("dDrBRD");
-				} else if (down[2][1] == 'W') {
-					turns("ddDrBRDD");
-				}
-
-				System.out.println("WHITE EDGES PART 2");
-				if (back[0][1] == 'W') {
-					char adjacent = up[0][1];
-					if (adjacent == 'B') {
-						turns("BLL");
-					} else if (adjacent == 'R') {
-						turns("UU");
-					} else if (adjacent == 'G') {
-						turns("bRR");
-					} else {
-						turns("BBDD");
-					}
-				}
-
-				whiteEdgesInPlace = front[0][1] == 'W' && front[1][0] == 'W' && front[1][2] == 'W' && front[2][1] == 'W'
-						&& left[1][2] == 'B' && right[1][0] == 'G' && down[0][1] == 'O' && up[2][1] == 'R';
+			if (!whiteEdgesInPlace) {
+				System.out.println("WHITE EDGES TURNED OUT OF PLACE");
+				System.exit(0);
 			}
-		}
 
-		// second step: gather the white corners
-		void whiteCorners() {
+			whiteCornersInPlace = front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W' && front[2][2] == 'W'
+					&& left[0][2] == 'B' && left[2][2] == 'B' && right[2][0] == 'G' && right[0][0] == 'G'
+					&& up[2][0] == 'R' && up[2][2] == 'R' && down[0][0] == 'O' && down[0][2] == 'O';
+		}
+	}
+
+	// third step: solve the edges for each side
+	void sideEdges() {
+		boolean sideEdgesInPlace = up[1][0] == 'R' && up[1][2] == 'R' && right[0][1] == 'G' && right[2][1] == 'G'
+				&& down[1][0] == 'O' && down[1][2] == 'O' && left[0][1] == 'B' && left[2][1] == 'B'
+				&& front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W' && front[2][2] == 'W';
+
+		while (!sideEdgesInPlace) {
+			System.out.println("SOLVING SIDE EDGES NOW");
+			if (back[1][0] != 'W' && right[1][2] != 'W' && back[1][0] != 'Y' && right[1][2] != 'Y') {
+				turns("B");
+			} else if (back[1][2] != 'W' && left[1][0] != 'W' && back[1][2] != 'Y' && left[1][0] != 'Y') {
+				turns("b");
+			} else if (back[2][1] != 'W' && down[2][1] != 'W' && back[2][1] != 'Y' && down[2][1] != 'Y') {
+				turns("BB");
+			} else if ((up[1][2] != 'R' || right[0][1] != 'G') && (up[1][2] != 'Y' && right[0][1] != 'Y')) {
+				turns("RBrbubUBB");
+			} else if ((up[1][0] != 'R' || left[0][1] != 'B') && (up[1][0] != 'Y' && left[0][1] != 'Y')) {
+				turns("UBublbLB");
+			} else if ((down[1][0] != 'O' || left[2][1] != 'B') && (down[1][0] != 'Y' && left[2][1] != 'Y')) {
+				turns("LBlbdbD");
+			} else if ((down[1][2] != 'O' || right[1][0] != 'G') && (down[1][2] != 'Y' && right[1][0] != 'Y')) {
+				turns("rbRBDBd");
+			} else {
+				// System.out.println("A SHIFT WAS NOT MADE");
+			}
+
+			System.out.println("SIDE EDGES PART 2");
+			if (back[0][1] == 'O') {
+				if (up[0][1] == 'G') {
+					turns("DBdbrbR");
+				} else if (up[0][1] == 'B') {
+					turns("dbDBLBl");
+				}
+			} else if (back[0][1] == 'R') {
+				if (up[0][1] == 'G') {
+					turns("BBubUBRBr");
+				} else if (up[0][1] == 'B') {
+					turns("BBUBublbL");
+				}
+			} else if (back[0][1] == 'G') {
+				if (up[0][1] == 'R') {
+					turns("BRBrbubU");
+				} else if (up[0][1] == 'O') {
+					turns("BrbRBDBd");
+				}
+			} else if (back[0][1] == 'B') {
+				if (up[0][1] == 'R') {
+					turns("blbLBUBu");
+				} else if (up[0][1] == 'O') {
+					turns("bLBlbdbD");
+				}
+			}
+
+			boolean whiteEdgesInPlace = front[0][1] == 'W' && front[1][0] == 'W' && front[1][2] == 'W'
+					&& front[2][1] == 'W' && left[1][2] == 'B' && right[1][0] == 'G' && down[0][1] == 'O'
+					&& up[2][1] == 'R';
+
+			if (!whiteEdgesInPlace) {
+				System.out.println("WHITE EDGES TURNED OUT OF PLACE");
+				System.exit(0);
+			}
+
 			boolean whiteCornersInPlace = front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W'
 					&& front[2][2] == 'W' && left[0][2] == 'B' && left[2][2] == 'B' && right[2][0] == 'G'
-					&& right[0][0] == 'G' && up[2][0] == 'R' && up[2][2] == 'R' && down[0][0] == 'O' && down[0][2] == 'O';
+					&& right[0][0] == 'G' && up[2][0] == 'R' && up[2][2] == 'R' && down[0][0] == 'O'
+					&& down[0][2] == 'O';
 
-			while (!whiteCornersInPlace) {
-				System.out.println("SOLVING WHITE CORNERS NOW");
-				if (back[0][0] == 'W') {
-					turns("B");
-				} else if (back[2][0] == 'W') {
-					turns("BB");
-				} else if (back[2][2] == 'W') {
-					turns("b");
-				} else if (up[0][2] == 'W') {
-					turns("B");
-				} else if (right[0][2] == 'W') {
-					turns("B");
-				} else if (right[2][2] == 'W') {
-					turns("BB");
-				} else if (down[2][2] == 'W') {
-					turns("BB");
-				} else if (down[2][0] == 'W') {
-					turns("b");
-				} else if (left[2][0] == 'W') {
-					turns("b");
-				} else if (up[2][0] == 'W') {
-					turns("UBub");
-				} else if (up[2][2] == 'W') {
-					turns("uBUB");
-				} else if (right[0][0] == 'W') {
-					turns("uBUB");
-				} else if (right[2][0] == 'W') {
-					turns("rBBR");
-				} else if (down[0][2] == 'W') {
-					turns("rBBR");
-				} else if (down[0][0] == 'W') {
-					turns("dbD");
-				} else if (left[2][2] == 'W') {
-					turns("dbD");
-				} else if (left[0][2] == 'W') {
-					turns("lbL");
-				} else if (front[0][0] == 'W' && up[2][0] != 'R') {
-					turns("UBub");
-				} else if (front[0][2] == 'W' && up[2][2] != 'R') {
-					turns("fUBubF");
-				} else if (front[2][2] == 'W' && down[0][2] != 'O') {
-					turns("FFUBubFF");
-				} else if (front[2][0] == 'W' && down[0][0] != 'O') {
-					turns("fUBubF");
-				}
-				
-				boolean whiteEdgesInPlace = front[0][1] == 'W' && front[1][0] == 'W' && front[1][2] == 'W' && front[2][1] == 'W'
-						&& left[1][2] == 'B' && right[1][0] == 'G' && down[0][1] == 'O' && up[2][1] == 'R';
-
-//				if (!whiteEdgesInPlace) {
-//					System.out.println("WHITE EDGES TURNED OUT OF PLACE");
-//					System.exit(0);
-//				}
-
-				System.out.println("WHITE CORNERS PART 2");
-				if (up[0][0] == 'W') {
-					if (left[0][0] == 'O') {
-						turns("FUBuf");
-					} else if (left[0][0] == 'G') {
-						turns("FFUBuFF");
-					} else if (left[0][0] == 'R') {
-						turns("fUBuF");
-					} else if (left[0][0] == 'B') {
-						turns("UBu");
-					}
-				} else if (back[0][2] == 'W') {
-					if (up[0][0] == 'R') {
-						turns("fUBBubUBuF");
-					} else if (up[0][0] == 'B') {
-						turns("UBBubUBu");
-					} else if (up[0][0] == 'O') {
-						turns("FUBBubUBuf");
-					} else if (up[0][0] == 'G') {
-						turns("FFUBBubUBuFF");
-					}
-				} else if (left[0][0] == 'W') {
-					if (up[0][0] == 'G') {
-						turns("bubU");
-					} else if (up[0][0] == 'O') {
-						turns("BBrbR");
-					} else if (up[0][0] == 'B') {
-						turns("BdbD");
-					} else if (up[0][0] == 'R') {
-						turns("lbL");
-					}
-				}
-				
-				whiteEdgesInPlace = front[0][1] == 'W' && front[1][0] == 'W' && front[1][2] == 'W' && front[2][1] == 'W'
-						&& left[1][2] == 'B' && right[1][0] == 'G' && down[0][1] == 'O' && up[2][1] == 'R';
-
-//				if (!whiteEdgesInPlace) {
-//					System.out.println("WHITE EDGES TURNED OUT OF PLACE");
-//					System.exit(0);
-//				}
-				
-				whiteCornersInPlace = front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W' && front[2][2] == 'W'
-						&& left[0][2] == 'B' && left[2][2] == 'B' && right[2][0] == 'G' && right[0][0] == 'G'
-						&& up[2][0] == 'R' && up[2][2] == 'R' && down[0][0] == 'O' && down[0][2] == 'O';
+			if (!whiteCornersInPlace) {
+				System.out.println("WHITE CORNERS TURNED OUT OF PLACE");
+				System.exit(0);
 			}
-		}
 
-		// third step: solve the edges for each side
-		void sideEdges() {
-			boolean sideEdgesInPlace = up[1][0] == 'R' && up[1][2] == 'R' && right[0][1] == 'G' && right[2][1] == 'G'
+			sideEdgesInPlace = up[1][0] == 'R' && up[1][2] == 'R' && right[0][1] == 'G' && right[2][1] == 'G'
 					&& down[1][0] == 'O' && down[1][2] == 'O' && left[0][1] == 'B' && left[2][1] == 'B'
 					&& front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W' && front[2][2] == 'W';
-
-			while (!sideEdgesInPlace) {
-				System.out.println("SOLVING SIDE EDGES NOW");
-				if (back[1][0] != 'W' && right[1][2] != 'W' && back[1][0] != 'Y' && right[1][2] != 'Y') {
-					turns("B");
-				} else if (back[1][2] != 'W' && left[1][0] != 'W' && back[1][2] != 'Y' && left[1][0] != 'Y') {
-					turns("b");
-				} else if (back[2][1] != 'W' && down[2][1] != 'W' && back[2][1] != 'Y' && down[2][1] != 'Y') {
-					turns("BB");
-				} else if ((up[1][2] != 'R' || right[0][1] != 'G') && (up[1][2] != 'Y' && right[0][1] != 'Y')) {
-					turns("RBrbubUBB");
-				} else if ((up[1][0] != 'R' || left[0][1] != 'B') && (up[1][0] != 'Y' && left[0][1] != 'Y')) {
-					turns("UBublbLB");
-				} else if ((down[1][0] != 'O' || left[2][1] != 'B') && (down[1][0] != 'Y' && left[2][1] != 'Y')) {
-					turns("LBlbdbD");
-				} else if ((down[1][2] != 'O' || right[1][0] != 'G') && (down[1][2] != 'Y' && right[1][0] != 'Y')) {
-					turns("rbRBDBd");
-				} else {
-					// System.out.println("A SHIFT WAS NOT MADE");
-				}
-
-				System.out.println("SIDE EDGES PART 2");
-				if (back[0][1] == 'O') {
-					if (up[0][1] == 'G') {
-						turns("DBdbrbR");
-					} else if (up[0][1] == 'B') {
-						turns("dbDBLBl");
-					}
-				} else if (back[0][1] == 'R') {
-					if (up[0][1] == 'G') {
-						turns("BBubUBRBr");
-					} else if (up[0][1] == 'B') {
-						turns("BBUBublbL");
-					}
-				} else if (back[0][1] == 'G') {
-					if (up[0][1] == 'R') {
-						turns("BRBrbubU");
-					} else if (up[0][1] == 'O') {
-						turns("BrbRBDBd");
-					}
-				} else if (back[0][1] == 'B') {
-					if (up[0][1] == 'R') {
-						turns("blbLBUBu");
-					} else if (up[0][1] == 'O') {
-						turns("bLBlbdbD");
-					}
-				}
-
-				boolean whiteEdgesInPlace = front[0][1] == 'W' && front[1][0] == 'W' && front[1][2] == 'W' && front[2][1] == 'W'
-						&& left[1][2] == 'B' && right[1][0] == 'G' && down[0][1] == 'O' && up[2][1] == 'R';
-
-//				if (!whiteEdgesInPlace) {
-//					System.out.println("WHITE EDGES TURNED OUT OF PLACE");
-//					System.exit(0);
-//				}
-				
-				boolean whiteCornersInPlace = front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W'
-						&& front[2][2] == 'W' && left[0][2] == 'B' && left[2][2] == 'B' && right[2][0] == 'G'
-						&& right[0][0] == 'G' && up[2][0] == 'R' && up[2][2] == 'R' && down[0][0] == 'O' && down[0][2] == 'O';
-
-//				if (!whiteCornersInPlace) {
-//					System.out.println("WHITE CORNERS TURNED OUT OF PLACE");
-//					System.exit(0);
-//				}
-				
-				sideEdgesInPlace = up[1][0] == 'R' && up[1][2] == 'R' && right[0][1] == 'G' && right[2][1] == 'G'
-						&& down[1][0] == 'O' && down[1][2] == 'O' && left[0][1] == 'B' && left[2][1] == 'B'
-						&& front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W' && front[2][2] == 'W';
-			}
 		}
-		
-		// fourth step: solve the yellow side
-		void yellowSide() {
-			boolean yellowSideSolved = back[0][0] == 'Y' && back[0][1] == 'Y' && back[0][2] == 'Y'
-					&& back[1][0] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y'
-					&& back[2][0] == 'Y' && back[2][1] == 'Y' && back[2][2] == 'Y';
-			
-			while (!yellowSideSolved) {
-				System.out.println("SOLVING YELLOW SIDE");
-				if (back[1][0] == 'Y' && back[1][2] == 'Y' && back[0][1] != 'Y' && back[2][1] != 'Y') {
-					// LINE
-					turns("URBrbu");
-				} else if (back[1][0] != 'Y' && back[1][2] != 'Y' && back[0][1] == 'Y' && back[2][1] == 'Y') {
-					turns("B");
-				} else if (back[1][0] == 'Y' && back[1][2] != 'Y' && back[0][1] == 'Y' && back[2][1] != 'Y') {
-					// L
-					turns("UmRBrbuM");
-				} else if (back[1][0] == 'Y' && back[1][2] != 'Y' && back[0][1] != 'Y' && back[2][1] == 'Y') {
-					turns("B");
-				} else if (back[1][0] != 'Y' && back[1][2] == 'Y' && back[0][1] != 'Y' && back[2][1] == 'Y') {
-					turns("BB");
-				} else if (back[1][0] != 'Y' && back[1][2] == 'Y' && back[0][1] == 'Y' && back[2][1] != 'Y') {
-					turns("b");
-				} else if (back[1][0] != 'Y' && back[1][2] != 'Y' && back[0][1] != 'Y' && back[2][1] != 'Y') {
-					// DOT
-					turns("URBrbuUmRBrbuM");
-				} else if (back[1][0] == 'Y' && back[1][2] == 'Y' && back[0][1] == 'Y' && back[2][1] == 'Y') {
-					// CROSS
-					if (back[0][0] == 'Y' && back[0][2] != 'Y' && back[2][0] != 'Y' && back[2][2] != 'Y') {
-						turns("B");
-					} else if (back[0][0] != 'Y' && back[0][2] == 'Y' && back[2][0] != 'Y' && back[2][2] != 'Y') {
-						if (up[0][2] == 'Y') {
-							turns("RBrBRBBr");
-						} else {
-							turns("B");
-						}
-					} else if (back[0][0] != 'Y' && back[0][2] != 'Y' && back[2][0] == 'Y' && back[2][2] != 'Y') {
-						turns("B");
-					} else if (back[0][0] != 'Y' && back[0][2] != 'Y' && back[2][0] != 'Y' && back[2][2] == 'Y') {
-						if (up[0][0] == 'Y') {
-							turns("rbRbrBBR");
-						} else {
-							turns("b");
-						}
-					} else if (up[0][0] == 'Y' && up[0][2] == 'Y' && down[2][0] == 'Y' && down[2][2] == 'Y') {
-						turns("URBrbRBrbRBrbu");
-					} else if (left[0][0] == 'Y' && left[2][0] == 'Y' && right[0][2] == 'Y' && right[2][2] == 'Y') {
-						turns("B");
-					} else if (up[0][0] == 'Y' && up[0][2] == 'Y' && back[0][0] != 'Y' && back[0][2] != 'Y' && back[2][0] != 'Y' && back[2][2] != 'Y') {
-						turns("B");
-					} else if (down[2][0] == 'Y' && down[2][2] == 'Y' && back[0][0] != 'Y' && back[0][2] != 'Y' && back[2][0] != 'Y' && back[2][2] != 'Y') {
-						turns("b");
-					} else if (right[0][2] == 'Y' && right[2][2] == 'Y' && back[0][0] != 'Y' && back[0][2] != 'Y' && back[2][0] != 'Y' && back[2][2] != 'Y') {
-						turns("BB");
-					} else if (left[0][0] == 'Y' && left[2][0] == 'Y' && back[0][0] != 'Y' && back[0][2] != 'Y' && back[2][0] != 'Y' && back[2][2] != 'Y') {
-						turns("RBBRRbRRbRRBBR");
-					} else if (back[0][0] != 'Y' && back[0][2] == 'Y' && back[2][0] != 'Y' && back[2][2] == 'Y') {
-						// left side is empty
-						turns("BB");
-					} else if (back[0][0] == 'Y' && back[0][2] != 'Y' && back[2][0] == 'Y' && back[2][2] != 'Y') {
-						// right side is empty
-						turns("b");
-					} else if (back[0][0] != 'Y' && back[0][2] != 'Y' && back[2][0] == 'Y' && back[2][2] == 'Y') {
-						// up side is empty
-						if (up[0][0] == 'Y' && up[0][2] == 'Y') {
-							turns("RRFrBBRfrBBr");
-						} else {
-							turns("BiRBrbIrURu");
-						}
-					} else if (back[0][0] == 'Y' && back[0][2] == 'Y' && back[2][0] != 'Y' && back[2][2] != 'Y') {
-						// down side is empty
-						turns("b");
-					} else if (back[0][0] == 'Y' && back[0][2] != 'Y' && back[2][2] == 'Y' && back[2][0] != 'Y') {
-						turns("uiRBrbIrUR");
-					} else if (back[0][0] != 'Y' && back[0][2] == 'Y' && back[2][2] != 'Y' && back[2][0] == 'Y') {
-						turns("B");
-					}
-				}
-				
-				boolean whiteEdgesInPlace = front[0][1] == 'W' && front[1][0] == 'W' && front[1][2] == 'W' && front[2][1] == 'W'
-						&& left[1][2] == 'B' && right[1][0] == 'G' && down[0][1] == 'O' && up[2][1] == 'R';
+	}
 
-//				if (!whiteEdgesInPlace) {
-//					System.out.println("WHITE EDGES TURNED OUT OF PLACE");
-//					System.exit(0);
-//				}
-				
-				boolean whiteCornersInPlace = front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W'
-						&& front[2][2] == 'W' && left[0][2] == 'B' && left[2][2] == 'B' && right[2][0] == 'G'
-						&& right[0][0] == 'G' && up[2][0] == 'R' && up[2][2] == 'R' && down[0][0] == 'O' && down[0][2] == 'O';
+	int count = 0;
 
-//				if (!whiteCornersInPlace) {
-//					System.out.println("WHITE CORNERS TURNED OUT OF PLACE");
-//					System.exit(0);
-//				}
-				
-				yellowSideSolved = back[0][0] == 'Y' && back[0][1] == 'Y' && back[0][2] == 'Y'
-						&& back[1][0] == 'Y' && back[1][1] == 'Y' && back[1][2] == 'Y'
-						&& back[2][0] == 'Y' && back[2][1] == 'Y' && back[2][2] == 'Y';
-			}
-		}
-		
-		// fifth step: solve the last layer
-		void lastLayer() {
-			while (!solved()) {
-				System.out.println("SOLVING FOR THE LAST LAYER");
-				boolean leftAlternate = left[0][0] == left[2][0] && left[0][0] != left[1][0];
-				boolean rightAlternate = right[0][2] == right[2][2] && right[0][2] != right[1][2];
-				boolean upAlternate = up[0][0] == up[0][2] && up[0][0] != up[0][1];
-				boolean downAlternate = down[2][0] == down[2][2] && down[2][0] != down[2][1];
-				
-				boolean leftUniform = left[0][0] == left[2][0] && left[0][0] == left[1][0];
-				boolean rightUniform = right[0][2] == right[2][2] && right[0][2] == right[1][2];
-				boolean upUniform = up[0][0] == up[0][2] && up[0][0] == up[0][1];
-				boolean downUniform = down[2][0] == down[2][2] && down[2][0] == down[2][1];
-				
-				boolean noUniform = !leftUniform && !rightUniform && !upUniform && !downUniform;
-				boolean noAlternate = !leftAlternate && !rightAlternate && !upAlternate && !downAlternate;
-				
-				boolean allAlternate = leftAlternate && rightAlternate && upAlternate && downAlternate;
-				boolean allUniform = leftUniform && rightUniform && upUniform && downUniform;
-				
-				if (rightAlternate && !upAlternate && !leftAlternate && !downAlternate && noUniform) {
-					turns("b");
-				} else if (upAlternate && !leftAlternate && !downAlternate && !rightAlternate && noUniform) {
-					turns("BB");
-				} else if (downAlternate && !rightAlternate && !upAlternate && !leftAlternate && noUniform) {
-					turns("rUrDDRurDDRR");
-				} else if (leftAlternate && !downAlternate && !rightAlternate && !upAlternate && noUniform) {
+	// fourth step: solve the yellow side
+	void yellowSide() {
+		boolean yellowSideSolved = back[0][0] == 'Y' && back[0][1] == 'Y' && back[0][2] == 'Y' && back[1][0] == 'Y'
+				&& back[1][1] == 'Y' && back[1][2] == 'Y' && back[2][0] == 'Y' && back[2][1] == 'Y'
+				&& back[2][2] == 'Y';
+
+		while (!yellowSideSolved) {
+			System.out.println("SOLVING YELLOW SIDE");
+			if (back[1][0] == 'Y' && back[1][2] == 'Y' && back[0][1] != 'Y' && back[2][1] != 'Y') {
+				// LINE
+				turns("URBrbu");
+			} else if (back[1][0] != 'Y' && back[1][2] != 'Y' && back[0][1] == 'Y' && back[2][1] == 'Y') {
+				turns("B");
+			} else if (back[1][0] == 'Y' && back[1][2] != 'Y' && back[0][1] == 'Y' && back[2][1] != 'Y') {
+				// L
+				turns("UmRBrbuM");
+			} else if (back[1][0] == 'Y' && back[1][2] != 'Y' && back[0][1] != 'Y' && back[2][1] == 'Y') {
+				turns("B");
+			} else if (back[1][0] != 'Y' && back[1][2] == 'Y' && back[0][1] != 'Y' && back[2][1] == 'Y') {
+				turns("BB");
+			} else if (back[1][0] != 'Y' && back[1][2] == 'Y' && back[0][1] == 'Y' && back[2][1] != 'Y') {
+				turns("b");
+			} else if (back[1][0] != 'Y' && back[1][2] != 'Y' && back[0][1] != 'Y' && back[2][1] != 'Y') {
+				// DOT
+				turns("URBrbuUmRBrbuM");
+			} else if (back[1][0] == 'Y' && back[1][2] == 'Y' && back[0][1] == 'Y' && back[2][1] == 'Y') {
+				// CROSS
+				if (back[0][0] == 'Y' && back[0][2] != 'Y' && back[2][0] != 'Y' && back[2][2] != 'Y') {
 					turns("B");
-				} else if (noUniform && noAlternate) {
-					turns("rUrDDRurDDRR");
-				} else if (downUniform && rightAlternate && upAlternate && leftAlternate) {
-					if (up[0][1] == left[0][0]) {
-						turns("UUBLrUUlRBUU");
+				} else if (back[0][0] != 'Y' && back[0][2] == 'Y' && back[2][0] != 'Y' && back[2][2] != 'Y') {
+					if (up[0][2] == 'Y') {
+						turns("RBrBRBBr");
 					} else {
-						turns("UUbLrUUlRbUU");
+						turns("B");
 					}
-				} else if (rightUniform && upAlternate && leftAlternate && downAlternate) {
+				} else if (back[0][0] != 'Y' && back[0][2] != 'Y' && back[2][0] == 'Y' && back[2][2] != 'Y') {
+					turns("B");
+				} else if (back[0][0] != 'Y' && back[0][2] != 'Y' && back[2][0] != 'Y' && back[2][2] == 'Y') {
+					if (up[0][0] == 'Y') {
+						turns("rbRbrBBR");
+					} else {
+						turns("b");
+					}
+				} else if (up[0][0] == 'Y' && up[0][2] == 'Y' && down[2][0] == 'Y' && down[2][2] == 'Y') {
+					turns("URBrbRBrbRBrbu");
+				} else if (left[0][0] == 'Y' && left[2][0] == 'Y' && right[0][2] == 'Y' && right[2][2] == 'Y') {
+					turns("B");
+				} else if (up[0][0] == 'Y' && up[0][2] == 'Y' && back[0][0] != 'Y' && back[0][2] != 'Y'
+						&& back[2][0] != 'Y' && back[2][2] != 'Y') {
+					turns("B");
+				} else if (down[2][0] == 'Y' && down[2][2] == 'Y' && back[0][0] != 'Y' && back[0][2] != 'Y'
+						&& back[2][0] != 'Y' && back[2][2] != 'Y') {
 					turns("b");
-				} else if (upUniform && leftAlternate && downAlternate && rightAlternate) {
+				} else if (right[0][2] == 'Y' && right[2][2] == 'Y' && back[0][0] != 'Y' && back[0][2] != 'Y'
+						&& back[2][0] != 'Y' && back[2][2] != 'Y') {
 					turns("BB");
-				} else if (leftUniform && downAlternate && rightAlternate && upAlternate) {
-					turns("B");
-				} else if (allAlternate) {
-					turns("UUbLrUUlRbUU");
-				} else if (allUniform) {
-					turns("B");
-				} else if (leftUniform && !rightUniform && !upUniform && !downUniform) {
-					turns("B");
-				} else if (rightUniform && !leftUniform && !upUniform && !downUniform) {
+				} else if (left[0][0] == 'Y' && left[2][0] == 'Y' && back[0][0] != 'Y' && back[0][2] != 'Y'
+						&& back[2][0] != 'Y' && back[2][2] != 'Y') {
+					turns("RBBRRbRRbRRBBR");
+				} else if (back[0][0] != 'Y' && back[0][2] == 'Y' && back[2][0] != 'Y' && back[2][2] == 'Y') {
+					// left side is empty
+					turns("BB");
+				} else if (back[0][0] == 'Y' && back[0][2] != 'Y' && back[2][0] == 'Y' && back[2][2] != 'Y') {
+					// right side is empty
 					turns("b");
-				} else if (upUniform && !downUniform && !leftUniform && !rightUniform) {
-					turns("BB");
-				} else if (downUniform && !upUniform && !leftUniform && !rightUniform) {
-					turns("rUrDDRurDDRR");
+				} else if (back[0][0] != 'Y' && back[0][2] != 'Y' && back[2][0] == 'Y' && back[2][2] == 'Y') {
+					// up side is empty
+					if (up[0][0] == 'Y' && up[0][2] == 'Y') {
+						turns("RRFrBBRfrBBr");
+					} else {
+						turns("BiRBrbIrURu");
+					}
+				} else if (back[0][0] == 'Y' && back[0][2] == 'Y' && back[2][0] != 'Y' && back[2][2] != 'Y') {
+					// down side is empty
+					turns("b");
+				} else if (back[0][0] == 'Y' && back[0][2] != 'Y' && back[2][2] == 'Y' && back[2][0] != 'Y') {
+					turns("uiRBrbIrUR");
+				} else if (back[0][0] != 'Y' && back[0][2] == 'Y' && back[2][2] != 'Y' && back[2][0] == 'Y') {
+					turns("B");
 				}
-				
-				boolean whiteEdgesInPlace = front[0][1] == 'W' && front[1][0] == 'W' && front[1][2] == 'W' && front[2][1] == 'W'
-						&& left[1][2] == 'B' && right[1][0] == 'G' && down[0][1] == 'O' && up[2][1] == 'R';
+			}
 
-//				if (!whiteEdgesInPlace) {
-//					System.out.println("WHITE EDGES TURNED OUT OF PLACE");
-//					System.exit(0);
-//				}
-				
-				boolean whiteCornersInPlace = front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W'
-						&& front[2][2] == 'W' && left[0][2] == 'B' && left[2][2] == 'B' && right[2][0] == 'G'
-						&& right[0][0] == 'G' && up[2][0] == 'R' && up[2][2] == 'R' && down[0][0] == 'O' && down[0][2] == 'O';
+			boolean whiteEdgesInPlace = front[0][1] == 'W' && front[1][0] == 'W' && front[1][2] == 'W'
+					&& front[2][1] == 'W' && left[1][2] == 'B' && right[1][0] == 'G' && down[0][1] == 'O'
+					&& up[2][1] == 'R';
 
-//				if (!whiteCornersInPlace) {
-//					System.out.println("WHITE CORNERS TURNED OUT OF PLACE");
-//					System.exit(0);
-//				}
+			if (!whiteEdgesInPlace) {
+				System.out.println("WHITE EDGES TURNED OUT OF PLACE");
+				System.exit(0);
+			}
+
+			boolean whiteCornersInPlace = front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W'
+					&& front[2][2] == 'W' && left[0][2] == 'B' && left[2][2] == 'B' && right[2][0] == 'G'
+					&& right[0][0] == 'G' && up[2][0] == 'R' && up[2][2] == 'R' && down[0][0] == 'O'
+					&& down[0][2] == 'O';
+
+			if (!whiteCornersInPlace) {
+				System.out.println("WHITE CORNERS TURNED OUT OF PLACE");
+				System.exit(0);
+			}
+
+			yellowSideSolved = back[0][0] == 'Y' && back[0][1] == 'Y' && back[0][2] == 'Y' && back[1][0] == 'Y'
+					&& back[1][1] == 'Y' && back[1][2] == 'Y' && back[2][0] == 'Y' && back[2][1] == 'Y'
+					&& back[2][2] == 'Y';
+		}
+	}
+
+	// fifth step: solve the last layer
+	void lastLayer() {
+		while (!solved()) {
+			System.out.println("SOLVING FOR THE LAST LAYER");
+			boolean leftAlternate = left[0][0] == left[2][0] && left[0][0] != left[1][0];
+			boolean rightAlternate = right[0][2] == right[2][2] && right[0][2] != right[1][2];
+			boolean upAlternate = up[0][0] == up[0][2] && up[0][0] != up[0][1];
+			boolean downAlternate = down[2][0] == down[2][2] && down[2][0] != down[2][1];
+
+			boolean leftUniform = left[0][0] == left[2][0] && left[0][0] == left[1][0];
+			boolean rightUniform = right[0][2] == right[2][2] && right[0][2] == right[1][2];
+			boolean upUniform = up[0][0] == up[0][2] && up[0][0] == up[0][1];
+			boolean downUniform = down[2][0] == down[2][2] && down[2][0] == down[2][1];
+
+			boolean noUniform = !leftUniform && !rightUniform && !upUniform && !downUniform;
+			boolean noAlternate = !leftAlternate && !rightAlternate && !upAlternate && !downAlternate;
+
+			boolean allAlternate = leftAlternate && rightAlternate && upAlternate && downAlternate;
+			boolean allUniform = leftUniform && rightUniform && upUniform && downUniform;
+
+			if (rightAlternate && !upAlternate && !leftAlternate && !downAlternate && noUniform) {
+				turns("b");
+			} else if (upAlternate && !leftAlternate && !downAlternate && !rightAlternate && noUniform) {
+				turns("BB");
+			} else if (downAlternate && !rightAlternate && !upAlternate && !leftAlternate && noUniform) {
+				turns("rUrDDRurDDRR");
+			} else if (leftAlternate && !downAlternate && !rightAlternate && !upAlternate && noUniform) {
+				turns("B");
+			} else if (noUniform && noAlternate) {
+				turns("rUrDDRurDDRR");
+			} else if (downUniform && rightAlternate && upAlternate && leftAlternate) {
+				if (up[0][1] == left[0][0]) {
+					turns("UUBLrUUlRBUU");
+				} else {
+					turns("UUbLrUUlRbUU");
+				}
+			} else if (rightUniform && upAlternate && leftAlternate && downAlternate) {
+				turns("b");
+			} else if (upUniform && leftAlternate && downAlternate && rightAlternate) {
+				turns("BB");
+			} else if (leftUniform && downAlternate && rightAlternate && upAlternate) {
+				turns("B");
+			} else if (allAlternate) {
+				turns("UUbLrUUlRbUU");
+			} else if (allUniform) {
+				turns("B");
+			} else if (leftUniform && !rightUniform && !upUniform && !downUniform) {
+				turns("B");
+			} else if (rightUniform && !leftUniform && !upUniform && !downUniform) {
+				turns("b");
+			} else if (upUniform && !downUniform && !leftUniform && !rightUniform) {
+				turns("BB");
+			} else if (downUniform && !upUniform && !leftUniform && !rightUniform) {
+				turns("rUrDDRurDDRR");
+			}
+
+			boolean whiteEdgesInPlace = front[0][1] == 'W' && front[1][0] == 'W' && front[1][2] == 'W'
+					&& front[2][1] == 'W' && left[1][2] == 'B' && right[1][0] == 'G' && down[0][1] == 'O'
+					&& up[2][1] == 'R';
+
+			if (!whiteEdgesInPlace) {
+				System.out.println("WHITE EDGES TURNED OUT OF PLACE");
+				System.exit(0);
+			}
+
+			boolean whiteCornersInPlace = front[0][0] == 'W' && front[0][2] == 'W' && front[2][0] == 'W'
+					&& front[2][2] == 'W' && left[0][2] == 'B' && left[2][2] == 'B' && right[2][0] == 'G'
+					&& right[0][0] == 'G' && up[2][0] == 'R' && up[2][2] == 'R' && down[0][0] == 'O'
+					&& down[0][2] == 'O';
+
+			if (!whiteCornersInPlace) {
+				System.out.println("WHITE CORNERS TURNED OUT OF PLACE");
+				System.exit(0);
 			}
 		}
+	}
 
-		public void solve() {
-			whiteEdges();
-			whiteCorners();
-			sideEdges();
-			yellowSide();
-			lastLayer();
-			System.out.println("CUBE IS SOLVED");
-		}
+	public void solve() {
+		whiteEdges();
+		whiteCorners();
+		sideEdges();
+		yellowSide();
+		lastLayer();
+		System.out.println("CUBE IS SOLVED");
+	}
 
 	// testing method to display the cube
 	public String toString() {

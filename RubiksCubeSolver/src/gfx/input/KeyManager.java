@@ -64,6 +64,12 @@ public class KeyManager implements KeyListener {
 				cube.turn("L");
 			else if (e.getKeyCode() == KeyEvent.VK_S)
 				cube.scramble();
+			else if (e.getKeyCode() == KeyEvent.VK_0) {
+				for (int i = 0; i < 100; i ++) {
+					cube.scramble();
+					cube.solve();
+				}
+			}
 		}
 		
 		if (e.getKeyCode() == KeyEvent.VK_UP)
