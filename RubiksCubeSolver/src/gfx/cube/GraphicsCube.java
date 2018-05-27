@@ -893,12 +893,29 @@ public class GraphicsCube {
 	}
 
 	public void solve() {
+		resetPosition();
 		whiteEdges();
 		whiteCorners();
 		sideEdges();
 		yellowSide();
 		lastLayer();
 		System.out.println("CUBE IS SOLVED");
+	}
+	private void resetPosition() {
+		for (int i = 0; i < 4; i++) {
+			if (front[1][1] == 'W')
+				break;
+			spin("UP");
+		}
+		for (int i = 0; i < 4; i++) {
+			if (front[1][1] == 'W')
+				break;
+			spin("RIGHT");
+		}
+		spin("DOWN");
+		while (front[1][1] != 'R')
+			spin("RIGHT");
+		spin("UP");
 	}
 
 	// testing method to display the cube
