@@ -30,6 +30,8 @@ public class Program implements Runnable {
 		this.height = height;
 	}
 	private void init() {
+		Assets.init();
+		
 		display = new Display(title, width, height);
 		display.getFrame().setVisible(true);
 		
